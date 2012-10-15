@@ -35,10 +35,19 @@ namespace RevitLibrary
             lblFileName.Text = RevitDocument.Title;
             manager = new ElementManager(RevitDocument);
 
-            options = manager.getExistingDesignOptions(RevitDocument.Title);
-            foreach (DesignOption dOption in options)
+            //options = manager.getExistingDesignOptions(RevitDocument.Title);
+            //foreach (DesignOption dOption in options)
+            //{
+            //    lbExistingDO.Items.Add(dOption);
+            //}
+
+            //get selected elements
+            UIDocument uidoc = new UIDocument(RevitDocument);
+            Autodesk.Revit.UI.Selection.SelElementSet collection = uidoc.Selection.Elements;
+            FamilyManager famManager = RevitDocument.FamilyManager;
+            foreach(Autodesk.Revit.DB.Element element in collection)
             {
-                lbExistingDO.Items.Add(dOption);
+                MessageBox.Show(famManager.CurrentType.ToString());
             }
         }
         private void btnWalls_Click(object sender, EventArgs e)
