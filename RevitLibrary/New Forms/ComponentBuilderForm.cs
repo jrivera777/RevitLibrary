@@ -20,7 +20,7 @@ namespace RevitLibrary.New_Forms
     public partial class ComponentBuilderForm : System.Windows.Forms.Form
     {
         private ElementManager manager;
-        private const String NSGAII_DIR = @"C:\Documents and Settings\fdot\My Documents\SIMULEICON\ikvm-7.1.4532.2\bin\";
+        private const String NSGAII_DIR = @"C:\Documents and Settings\fdot\My Documents\Visual Studio 2010\Projects\RevitLibrary\NSGAII";
         private Dictionary<String, double> areas = new Dictionary<string, double>();
         private Dictionary<String, double> volumes = new Dictionary<string, double>();
         private Dictionary<String, Assembly> Assemblies = new Dictionary<string, Assembly>();
@@ -30,7 +30,6 @@ namespace RevitLibrary.New_Forms
         {
             InitializeComponent();
         }
-
         private void btnAdd_Click(object sender, EventArgs e)
         {
             if (String.IsNullOrEmpty(txtCompName.Text))
@@ -38,12 +37,7 @@ namespace RevitLibrary.New_Forms
                 MessageBox.Show("Please enter a component name.");
                 return;
             }
-            //if(cboFoundInModel.SelectedIndex < 0)
-            //{
-            //    MessageBox.Show("Please select a component from the model to associate.");
-            //    return;
-            //}
-
+       
             BuildingComponent comp = null;
             if (cboFoundInModel.SelectedIndex < 0)
             {
@@ -164,8 +158,7 @@ namespace RevitLibrary.New_Forms
                         writer.WriteStartElement("Alternative");
                         writer.WriteElementString("Name", opt.AssemblyName);
                         writer.WriteElementString("Code", opt.AssemblyCode);
-                        //writer.WriteElementString("Area", opt.Area.ToString());
-                        //writer.WriteElementString("Volume", opt.Volume.ToString());
+                        
                         double cost = opt.CalculateCostPerUnit();
                         double co2 = opt.CalculateCO2PerUnit();
                         double duration = opt.CalculateRoughDuration(bComp.Area, bComp.Volume);
@@ -185,8 +178,6 @@ namespace RevitLibrary.New_Forms
                         writer.WriteElementString("TotalAssemblyCost", (cost * areaOrVolume).ToString());
                         writer.WriteElementString("TotalAssemblyCO2", (co2 * areaOrVolume).ToString());
                         writer.WriteElementString("EstimatedDuration", duration.ToString());
-                        //writer.WriteElementString("CostPerUnit", cost.ToString());
-                        //writer.WriteElementString("CO2PerUnit", co2.ToString());
                         writer.WriteEndElement();
                     }
                     writer.WriteEndElement();
@@ -249,9 +240,9 @@ namespace RevitLibrary.New_Forms
                 lbAssemblies.Items.Clear();
                 lbCrewOptions.Items.Clear();
                 lbCurrentCrew.Items.Clear();
-                txtArea.Clear();
-                txtVolume.Clear();
                 cboFoundInModel.SelectedIndex = -1;
+                txtArea.Text = bComp.Area.ToString();
+                txtVolume.Text = bComp.Volume.ToString();
                 lbCurrentOptions.Items.AddRange(bComp.Assemblies.ToArray());
                 lbAssemblies.Items.AddRange(manager.getAssembliesByCategory(bComp.Category, 30).ToArray());
             }
@@ -332,6 +323,11 @@ namespace RevitLibrary.New_Forms
                 crewFrm.Show(this);
             }
         }
+        /// <summary>
+        /// For each distinct assembly type, the total area and volume are calculated.
+        /// Duplicates are dropped.The areas and volumes are stored for later use.
+        /// </summary>
+        /// <param name="assemblies">List of assemblies, possibly containing duplicates. </param>
         private void calculateAreas_Volumes(List<Assembly> assemblies)
         {
             areas.Clear();
@@ -346,6 +342,7 @@ namespace RevitLibrary.New_Forms
                 {
                     double area = areas[assem.AssemblyCode];
                     areas[code] = area + assem.Area;
+                    Assemblies[code].Area = areas[code];
                 }
                 else
                 {
@@ -362,6 +359,7 @@ namespace RevitLibrary.New_Forms
                 {
                     double volume = volumes[assem.AssemblyCode];
                     volumes[code] = volume + assem.Volume;
+                    Assemblies[code].Volume = volumes[code];
                 }
                 else
                     volumes.Add(code, assem.Volume);
@@ -379,7 +377,6 @@ namespace RevitLibrary.New_Forms
                     lbCurrentCrew.Items.Add(assem.CurrentCrew);
             }
         }
-
         private void btnOrderComponents_Click(object sender, EventArgs e)
         {
             using (PhysicalScheduleForm phyFrm = new PhysicalScheduleForm())
@@ -395,7 +392,6 @@ namespace RevitLibrary.New_Forms
                     MessageBox.Show("Successfully saved Basic Schedule");
             }
         }
-
         private void btnCreateNewOption_Click(object sender, EventArgs e)
         {
             if (lbComponents.SelectedIndex < 0)
@@ -431,7 +427,6 @@ namespace RevitLibrary.New_Forms
                 }
             }
         }
-
         private void btnNSGAII_Click(object sender, EventArgs e)
         {
             String compFile = "";
@@ -471,6 +466,7 @@ namespace RevitLibrary.New_Forms
                     p.StartInfo.FileName = @"NSGAII.exe";
                     p.StartInfo.Arguments = "\"" + compFile + "\"  \"" + orderFile + "\"";
                     p.StartInfo.CreateNoWindow = true;
+                    p.StartInfo.UseShellExecute = true;
                     p.Start();
                     p.WaitForExit();
                 }
@@ -480,7 +476,6 @@ namespace RevitLibrary.New_Forms
                 }
             }
         }
-
         private void lbAssemblies_SelectedIndexChanged(object sender, EventArgs e)
         {
             lbCrewOptions.Items.Clear();

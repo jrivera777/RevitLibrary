@@ -59,5 +59,12 @@ namespace RevitLibrary.Properties {
                 resourceCulture = value;
             }
         }
+        
+        internal static System.Drawing.Bitmap house2 {
+            get {
+                object obj = ResourceManager.GetObject("house2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

@@ -35,11 +35,11 @@ namespace RevitLibrary
             lblFileName.Text = RevitDocument.Title;
             manager = new ElementManager(RevitDocument);
 
-            options = manager.getExistingDesignOptions(RevitDocument.Title);
-            foreach (DesignOption dOption in options)
-            {
-                lbExistingDO.Items.Add(dOption);
-            }
+            //options = manager.getExistingDesignOptions(RevitDocument.Title);
+            //foreach (DesignOption dOption in options)
+            //{
+            //    lbExistingDO.Items.Add(dOption);
+            //}
         }
         private void btnWalls_Click(object sender, EventArgs e)
         {
@@ -58,12 +58,13 @@ namespace RevitLibrary
 
             Wall wall = null;
             // Add wall into the created element set.
-            foreach (Autodesk.Revit.DB.Element elements in collection)
+            foreach (Autodesk.Revit.DB.Element elem in collection)
             {
-                if (elements is Wall)
+                if (elem is Wall)
                 {
                     StringBuilder sb = new StringBuilder();
-                    wall = (Wall)elements;
+                    
+                    wall = (Wall)elem;
                     foreach (Parameter param in wall.Parameters)
                         sb.Append(param.Definition.Name+ "=> StorageType-"+ param.StorageType.ToString() + ": " + param.AsValueString() + System.Environment.NewLine);
 
@@ -77,58 +78,58 @@ namespace RevitLibrary
 
                     MessageBox.Show(sb.ToString(), "WallType Parameters");
 
-                    Transaction trans = new Transaction(RevitDocument);
-                    if (trans.Start("UpdateHeight") == TransactionStatus.Started)
-                    {
-                        Parameter wParam = wall.get_Parameter(BuiltInParameter.WALL_USER_HEIGHT_PARAM);
-                        wParam.Set(100.0);
+                //    Transaction trans = new Transaction(RevitDocument);
+                //    if (trans.Start("UpdateHeight") == TransactionStatus.Started)
+                //    {
+                //        Parameter wParam = wall.get_Parameter(BuiltInParameter.WALL_USER_HEIGHT_PARAM);
+                //        wParam.Set(100.0);
 
-                        trans.Commit();
-                    }
+                //        trans.Commit();
+                //    }
 
-                    //if (trans.Start("ChangeWallLength") == TransactionStatus.Started)
-                    //{
-                    //    LocationCurve wallLocation = wall.Location as LocationCurve;
-                    //    MessageBox.Show(wallLocation.Curve.IsReadOnly.ToString());
+                //    //if (trans.Start("ChangeWallLength") == TransactionStatus.Started)
+                //    //{
+                //    //    LocationCurve wallLocation = wall.Location as LocationCurve;
+                //    //    MessageBox.Show(wallLocation.Curve.IsReadOnly.ToString());
 
-                    //    // get the points
-                    //    XYZ pt1 = wallLocation.Curve.get_EndPoint(0);
-                    //    XYZ pt2 = wallLocation.Curve.get_EndPoint(1);
+                //    //    // get the points
+                //    //    XYZ pt1 = wallLocation.Curve.get_EndPoint(0);
+                //    //    XYZ pt2 = wallLocation.Curve.get_EndPoint(1);
 
-                    //    pt2 = pt2.Add(new XYZ(10, 0, 0));
+                //    //    pt2 = pt2.Add(new XYZ(10, 0, 0));
 
-                    //    // create a new LineBound
-                    //    Line newWallLine = RevitDocument.Application.Create.NewLineBound(
-                    //      pt1, pt2);
+                //    //    // create a new LineBound
+                //    //    Line newWallLine = RevitDocument.Application.Create.NewLineBound(
+                //    //      pt1, pt2);
 
-                    //    // update the wall curve
-                    //    wallLocation.Curve = newWallLine;
+                //    //    // update the wall curve
+                //    //    wallLocation.Curve = newWallLine;
 
-                    //    trans.Commit();
+                //    //    trans.Commit();
 
-                    //    MessageBox.Show(wallLocation.Curve.ApproximateLength.ToString());
-                    //}
+                //    //    MessageBox.Show(wallLocation.Curve.ApproximateLength.ToString());
+                //    //}
 
-                    if (trans.Start("ChangeWallType") == TransactionStatus.Started)
-                    {
-                        ElementId id = null;
-                        foreach (WallType type in RevitDocument.WallTypes)
-                        {
-                            if (type.Name.Equals("Generic - 8\" Masonry"))
-                            {
-                                id = type.Id;
-                            }
-                        }
-                        wall.WallType = (WallType)RevitDocument.get_Element(id);
+                //    if (trans.Start("ChangeWallType") == TransactionStatus.Started)
+                //    {
+                //        ElementId id = null;
+                //        foreach (WallType type in RevitDocument.WallTypes)
+                //        {
+                //            if (type.Name.Equals("Generic - 8\" Masonry"))
+                //            {
+                //                id = type.Id;
+                //            }
+                //        }
+                //        wall.WallType = (WallType)RevitDocument.get_Element(id);
 
-                        trans.Commit();
-                    }
+                //        trans.Commit();
+                //    }
 
-                    sb.Clear();
-                    foreach (Parameter param in wall.Parameters)
-                        sb.Append(param.Definition.Name + "=> StorageType-" + param.StorageType.ToString() + ": " + param.AsValueString() + System.Environment.NewLine);
+                //    sb.Clear();
+                //    foreach (Parameter param in wall.Parameters)
+                //        sb.Append(param.Definition.Name + "=> StorageType-" + param.StorageType.ToString() + ": " + param.AsValueString() + System.Environment.NewLine);
 
-                    MessageBox.Show(sb.ToString(), "Wall Instance Parameters After Height Change");
+                //    MessageBox.Show(sb.ToString(), "Wall Instance Parameters After Height Change");
                 }
             }
         }
@@ -194,6 +195,7 @@ namespace RevitLibrary
         private void btnViewResults_Click(object sender, EventArgs e)
         {
             List<ProjectResult> results = new List<ProjectResult>();
+            String fName = "";
             using (OpenFileDialog openDlg = new OpenFileDialog())
             {
                 openDlg.Title = "Open Project Results";
@@ -202,6 +204,7 @@ namespace RevitLibrary
 
                 if (!String.IsNullOrEmpty(openDlg.FileName))
                 {
+                    fName = openDlg.FileName;
                     FileStream reader = new FileStream(openDlg.FileName, FileMode.Open, FileAccess.Read); 
                     XmlDocument projects = new System.Xml.XmlDocument();
                     projects.Load(reader);
@@ -241,8 +244,65 @@ namespace RevitLibrary
 
             using (ResultsForm resFrm = new ResultsForm())
             {
+                resFrm.FileName = fName;
                 resFrm.Results = results;
                 resFrm.ShowDialog();
+            }
+        }
+
+        private void btnFamily_Click(object sender, EventArgs e)
+        {
+            //define categories to search
+            List<BuiltInCategory> cats = new List<BuiltInCategory>();
+            cats.Add(BuiltInCategory.OST_Walls);
+            cats.Add(BuiltInCategory.OST_Roofs);
+            cats.Add(BuiltInCategory.OST_StructuralFoundation);
+
+            CreateFamilyTree(RevitDocument);
+        }
+
+        public void CreateFamilyTree(Document myDoc)
+        {
+            IEnumerable<Element> familiesCollector = new FilteredElementCollector(myDoc)
+                .OfClass(typeof(FamilyInstance))
+                .WhereElementIsNotElementType()
+                .Cast<FamilyInstance>()
+                // (family, familyInstances):
+                .GroupBy(fi => fi.Symbol.Family)
+                .Select(f => f.Key);
+
+            var mapCatToFam = new Dictionary<string, List<Element>>();
+
+            var categoryList = new Dictionary<string, Category>();
+
+            foreach (var f in familiesCollector)
+            {
+                Family fam = (Family)f;
+                var catName = "";
+                if (fam.FamilyCategory != null)
+                    catName = fam.FamilyCategory.Name;
+                if(!String.IsNullOrEmpty(catName))
+                {
+                    if (mapCatToFam.ContainsKey(catName))
+                        mapCatToFam[catName].Add(f);
+                    else
+                    {
+                        mapCatToFam.Add(catName,
+                          new List<Element> { f });
+                        categoryList.Add(catName,
+                          f.Category);
+
+                        StringBuilder sb = new StringBuilder();
+                        foreach (FamilySymbol sym in fam.Symbols)
+                            sb.Append(sym.Name + System.Environment.NewLine);
+                        MessageBox.Show(sb.ToString());
+                    }
+                }
+            }
+
+            foreach (KeyValuePair<String, Category> item in categoryList)
+            {
+                MessageBox.Show(item.Key);
             }
         }
     }

@@ -41,6 +41,9 @@
             this.btnTimeVSEI = new System.Windows.Forms.Button();
             this.btnCostVSEI = new System.Windows.Forms.Button();
             this.btn3D = new System.Windows.Forms.Button();
+            this.btnSort = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.cbSortBy = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // txtName
@@ -123,7 +126,7 @@
             // 
             this.lbProjects.FormattingEnabled = true;
             this.lbProjects.HorizontalScrollbar = true;
-            this.lbProjects.Location = new System.Drawing.Point(12, 134);
+            this.lbProjects.Location = new System.Drawing.Point(12, 169);
             this.lbProjects.Name = "lbProjects";
             this.lbProjects.Size = new System.Drawing.Size(512, 173);
             this.lbProjects.TabIndex = 10;
@@ -171,11 +174,45 @@
             this.btn3D.Visible = false;
             this.btn3D.Click += new System.EventHandler(this.btn3D_Click);
             // 
+            // btnSort
+            // 
+            this.btnSort.Location = new System.Drawing.Point(198, 140);
+            this.btnSort.Name = "btnSort";
+            this.btnSort.Size = new System.Drawing.Size(116, 23);
+            this.btnSort.TabIndex = 15;
+            this.btnSort.Text = "Sort";
+            this.btnSort.UseVisualStyleBackColor = true;
+            this.btnSort.Click += new System.EventHandler(this.btnSort_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(12, 145);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(44, 13);
+            this.label5.TabIndex = 16;
+            this.label5.Text = "Sort By:";
+            // 
+            // cbSortBy
+            // 
+            this.cbSortBy.FormattingEnabled = true;
+            this.cbSortBy.Items.AddRange(new object[] {
+            "Time",
+            "Cost",
+            "EI"});
+            this.cbSortBy.Location = new System.Drawing.Point(92, 142);
+            this.cbSortBy.Name = "cbSortBy";
+            this.cbSortBy.Size = new System.Drawing.Size(100, 21);
+            this.cbSortBy.TabIndex = 17;
+            // 
             // ResultsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(536, 385);
+            this.Controls.Add(this.cbSortBy);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.btnSort);
             this.Controls.Add(this.btn3D);
             this.Controls.Add(this.btnCostVSEI);
             this.Controls.Add(this.btnTimeVSEI);
@@ -212,5 +249,8 @@
         private System.Windows.Forms.Button btnTimeVSEI;
         private System.Windows.Forms.Button btnCostVSEI;
         private System.Windows.Forms.Button btn3D;
+        private System.Windows.Forms.Button btnSort;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox cbSortBy;
     }
 }
