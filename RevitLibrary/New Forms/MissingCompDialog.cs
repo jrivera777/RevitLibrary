@@ -13,7 +13,7 @@ namespace RevitLibrary.New_Forms
     {
         public double Area { get; set; }
         public double Volume { get; set; }
-        public String Name { get; set; }
+        public String CompName { get; set; }
         public String Category { get; set; }
         public String Code { get; set; }
         public MissingCompDialog()
@@ -43,7 +43,7 @@ namespace RevitLibrary.New_Forms
                     this.Area = ar;
                 if (Double.TryParse(txtVolume.Text, out vol))
                     this.Volume = vol;
-                this.Name = txtName.Text;
+                this.CompName = txtName.Text;
                 this.Category = txtCategory.Text;
                 this.Code = txtCode.Text;
 

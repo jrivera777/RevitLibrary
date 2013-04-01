@@ -44,6 +44,7 @@ local.properties
 *.jar
 *.exe
 *.user
+*.cd
 *.sln.docstates
 
 # Build results

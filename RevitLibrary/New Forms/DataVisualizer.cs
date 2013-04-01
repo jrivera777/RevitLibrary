@@ -19,7 +19,7 @@ namespace RevitLibrary.New_Forms
             TIMEVEI,
             COSTVEI            
         }
-        private const int TIME_BUFFER_ZONE = 25;
+        private const int TIME_BUFFER_ZONE = 100;
         private const int COST_BUFFER_ZONE = 10000;
         private const int EI_BUFFER_ZONE = 10000;
         public List<ProjectResult> Projects { get; set; }
@@ -38,7 +38,7 @@ namespace RevitLibrary.New_Forms
                     max = (int)res.TotalCost;
             }
 
-            return max + COST_BUFFER_ZONE;
+            return FindBound(max, true);
         }
         private int calculateMaxEI()
         {
@@ -49,7 +49,7 @@ namespace RevitLibrary.New_Forms
                     max = (int)res.TotalEI;
             }
 
-            return max + EI_BUFFER_ZONE;
+            return FindBound(max, true);
         }
         private int calculateMaxDuration()
         {
@@ -60,57 +60,121 @@ namespace RevitLibrary.New_Forms
                     max = (int)res.TotalDuration;
             }
 
-            return max + TIME_BUFFER_ZONE;
+            return FindBound(max, true);
+        }
+        private int calculateMinCost()
+        {
+            int Min = int.MaxValue;
+            foreach (ProjectResult res in this.Projects)
+            {
+                if (res.TotalCost < Min)
+                    Min = (int)res.TotalCost;
+            }
+
+            return FindBound(Min, false);
+        }
+        private int calculateMinEI()
+        {
+            int Min = int.MaxValue;
+            foreach (ProjectResult res in this.Projects)
+            {
+                if (res.TotalEI < Min)
+                    Min = (int)res.TotalEI;
+            }
+
+            return FindBound(Min, false);
+        }
+        private int calculateMinDuration()
+        {
+            int Min = int.MaxValue;
+            foreach (ProjectResult res in this.Projects)
+            {
+                if (res.TotalDuration < Min)
+                    Min = (int)res.TotalDuration;
+            }
+
+            return (int)FindBound(Min, false);
         }
         private void DataVisualizer_Load(object sender, EventArgs e)
         {
             chtData.Series.Add("Projects");
             chtData.Series["Projects"].ChartType = SeriesChartType.Point;
             chtData.Series["Projects"].MarkerStyle = MarkerStyle.Diamond;
-            chtData.Series["Projects"].MarkerColor = Color.Blue;
-            chtData.Series["Projects"].MarkerSize = 5;
-            chtData.Series["Projects"].YValuesPerPoint = 1;
+            chtData.Series["Projects"].MarkerSize = 7;
+            chtData.Series["Projects"].YValuesPerPoint = 32;
+            chtData.ChartAreas[0].AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount;
             switch (this.CompareType)
             {
                 case Comparison.TIMEVCOST:
                 {
+                    chtData.Titles.Add("TVC");
+                    chtData.Titles[0].Text = "Time vs Cost";
+                    chtData.Titles[0].Font = new Font("Arial", 16);
+                    chtData.Series["Projects"].MarkerColor = Color.Blue;
                     chtData.ChartAreas[0].AxisX.Maximum = calculateMaxDuration();
+                    chtData.ChartAreas[0].AxisX.Minimum = calculateMinDuration();
                     chtData.ChartAreas[0].AxisY.Maximum = calculateMaxCost();
-                    chtData.ChartAreas[0].AxisX.Title = "Duration";
-                    chtData.ChartAreas[0].AxisY.Title = "Cost";
-
+                    chtData.ChartAreas[0].AxisY.Minimum = calculateMinCost();
+                    chtData.ChartAreas[0].AxisX.Title = "Time (days)";
+                    chtData.ChartAreas[0].AxisY.Title = "Cost ($)";
+                    chtData.ChartAreas[0].AxisX.Interval = 10;
+                    chtData.ChartAreas[0].AxisY.Interval = 10000;
                     Projects.Sort(new CostComparer());
                     foreach (ProjectResult proj in Projects)
                     {
-                        chtData.Series["Projects"].Points.AddXY(proj.TotalDuration, proj.TotalCost);
+                        //chtData.Series["Projects"].Points.AddXY(proj.TotalDuration, proj.TotalCost);
+                        DataPoint pt = new DataPoint(proj.TotalDuration, proj.TotalCost);
+                        pt.ToolTip = String.Format("Time = {0}, Cost = {1}", proj.TotalDuration, proj.TotalCost);
+                        chtData.Series["Projects"].Points.Add(pt);
                     }
                     break;
                 }
                 case Comparison.TIMEVEI:
                 {
+                    chtData.Titles.Add("TVE");
+                    chtData.Titles[0].Text = "Time vs EI";
+                    chtData.Titles[0].Font = new Font("Arial", 16);
+                    chtData.Series["Projects"].MarkerColor = Color.Red;
                     chtData.ChartAreas[0].AxisX.Maximum = calculateMaxDuration();
-                    chtData.ChartAreas[0].AxisY.Maximum = calculateMaxEI();
-                    chtData.ChartAreas[0].AxisX.Title = "Duration";
-                    chtData.ChartAreas[0].AxisY.Title = "EI";
+                    chtData.ChartAreas[0].AxisX.Minimum = calculateMinDuration();
+                    chtData.ChartAreas[0].AxisY.Maximum = RoundToNearest(calculateMaxEI() + 20000, 10000);
+                    chtData.ChartAreas[0].AxisY.Minimum = calculateMinEI();
+                    chtData.ChartAreas[0].AxisX.Title = "Time (days)";
+                    chtData.ChartAreas[0].AxisY.Title = "EI (CO2)";
+                    chtData.ChartAreas[0].AxisX.Interval = 10;
+                    chtData.ChartAreas[0].AxisY.Interval = 10000;
 
                     Projects.Sort(new EIComparer());
                     foreach (ProjectResult proj in Projects)
                     {
-                        chtData.Series["Projects"].Points.AddXY(proj.TotalDuration, proj.TotalEI);
+                        //chtData.Series["Projects"].Points.AddXY(proj.TotalDuration, proj.TotalEI);
+                        DataPoint pt = new DataPoint(proj.TotalDuration, proj.TotalEI);
+                        pt.ToolTip = String.Format("Time = {0}, EI = {1}", proj.TotalDuration, proj.TotalEI);
+                        chtData.Series["Projects"].Points.Add(pt);
                     }
                     break;
                 }
                 case Comparison.COSTVEI:
                 {
+                    chtData.Titles.Add("CVE");
+                    chtData.Titles[0].Text = "Cost vs EI";
+                    chtData.Titles[0].Font = new Font("Arial", 16);
+                    chtData.Series["Projects"].MarkerColor = Color.Green;
                     chtData.ChartAreas[0].AxisX.Maximum = calculateMaxCost();
-                    chtData.ChartAreas[0].AxisY.Maximum = calculateMaxEI();
-                    chtData.ChartAreas[0].AxisX.Title = "Cost";
-                    chtData.ChartAreas[0].AxisY.Title = "EI";
-
+                    chtData.ChartAreas[0].AxisX.Minimum = calculateMinCost();
+                    chtData.ChartAreas[0].AxisY.Maximum = RoundToNearest(calculateMaxEI() + 20000, 10000);
+                    chtData.ChartAreas[0].AxisY.Minimum = calculateMinEI();
+                    chtData.ChartAreas[0].AxisX.Title = "Cost ($)";
+                    chtData.ChartAreas[0].AxisY.Title = "EI (CO2)";
+                    chtData.ChartAreas[0].AxisX.Interval = 10000;
+                    chtData.ChartAreas[0].AxisY.Interval = 10000;
                     Projects.Sort(new CostComparer());
                     foreach (ProjectResult proj in Projects)
                     {
-                        chtData.Series["Projects"].Points.AddXY(proj.TotalCost, proj.TotalEI);
+                        //chtData.Series["Projects"].Points.AddXY(proj.TotalCost, proj.TotalEI);
+                        DataPoint pt = new DataPoint(proj.TotalCost, proj.TotalEI);
+                        pt.ToolTip = String.Format("Cost = {0}, EI = {1}", proj.TotalCost, proj.TotalEI);
+                        chtData.Series["Projects"].Points.Add(pt);
                     }
                     break;
                 }
@@ -176,6 +240,34 @@ namespace RevitLibrary.New_Forms
                     result = -42;
                 return result;
             }
+        }
+        public double RoundToNearest(double Amount, double RoundTo)
+        {
+            double ExcessAmount = Amount % RoundTo;
+            if (ExcessAmount < (RoundTo / 2))
+            {
+                Amount -= ExcessAmount;
+            }
+            else
+            {
+                Amount += (RoundTo - ExcessAmount);
+            }
+
+            return Amount;
+        }
+
+        public int FindBound(int val, Boolean upper)
+        {
+            int temp = val;
+            while (temp % 10 != 0)
+            {
+                if (upper)
+                    temp++;
+                else
+                    temp--;
+            }
+
+            return temp;
         }
     }
 }

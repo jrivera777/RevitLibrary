@@ -124,6 +124,9 @@
             // 
             // lbProjects
             // 
+            this.lbProjects.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.lbProjects.FormattingEnabled = true;
             this.lbProjects.HorizontalScrollbar = true;
             this.lbProjects.Location = new System.Drawing.Point(12, 169);
@@ -134,6 +137,7 @@
             // 
             // btnTimeVsCost
             // 
+            this.btnTimeVsCost.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnTimeVsCost.Location = new System.Drawing.Point(316, 12);
             this.btnTimeVsCost.Name = "btnTimeVsCost";
             this.btnTimeVsCost.Size = new System.Drawing.Size(116, 23);
@@ -144,6 +148,7 @@
             // 
             // btnTimeVSEI
             // 
+            this.btnTimeVSEI.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnTimeVSEI.Location = new System.Drawing.Point(316, 43);
             this.btnTimeVSEI.Name = "btnTimeVSEI";
             this.btnTimeVSEI.Size = new System.Drawing.Size(116, 23);
@@ -154,6 +159,7 @@
             // 
             // btnCostVSEI
             // 
+            this.btnCostVSEI.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCostVSEI.Location = new System.Drawing.Point(316, 72);
             this.btnCostVSEI.Name = "btnCostVSEI";
             this.btnCostVSEI.Size = new System.Drawing.Size(116, 23);
@@ -164,6 +170,7 @@
             // 
             // btn3D
             // 
+            this.btn3D.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btn3D.Enabled = false;
             this.btn3D.Location = new System.Drawing.Point(316, 101);
             this.btn3D.Name = "btn3D";
@@ -209,7 +216,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(536, 385);
+            this.ClientSize = new System.Drawing.Size(538, 361);
             this.Controls.Add(this.cbSortBy);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.btnSort);
@@ -226,6 +233,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.label1);
+            this.MinimumSize = new System.Drawing.Size(419, 34);
             this.Name = "ResultsForm";
             this.Text = "Results";
             this.Load += new System.EventHandler(this.ResultsForm_Load);

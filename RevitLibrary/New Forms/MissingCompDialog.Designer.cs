@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.lblQuestion = new System.Windows.Forms.Label();
             this.txtArea = new System.Windows.Forms.TextBox();
             this.btnOK = new System.Windows.Forms.Button();
@@ -40,6 +41,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.txtCode = new System.Windows.Forms.TextBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // lblQuestion
@@ -61,6 +63,8 @@
             this.txtArea.Name = "txtArea";
             this.txtArea.Size = new System.Drawing.Size(138, 20);
             this.txtArea.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.txtArea, "Area (in square feet) of a component not represented in the model. \r\nMay be used " +
+                    "in calculations.");
             // 
             // btnOK
             // 
@@ -69,6 +73,7 @@
             this.btnOK.Size = new System.Drawing.Size(85, 23);
             this.btnOK.TabIndex = 5;
             this.btnOK.Text = "OK";
+            this.toolTip1.SetToolTip(this.btnOK, "Create new Component not represented in the model.");
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
@@ -96,6 +101,8 @@
             this.txtVolume.Name = "txtVolume";
             this.txtVolume.Size = new System.Drawing.Size(138, 20);
             this.txtVolume.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.txtVolume, "Volume (in cubic feet) of a component not represented in the model. \r\nMay be used" +
+                    " in calculations.");
             // 
             // label3
             // 
@@ -112,6 +119,7 @@
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(138, 20);
             this.txtName.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.txtName, "Name describing new component.");
             // 
             // txtCategory
             // 
@@ -119,6 +127,7 @@
             this.txtCategory.Name = "txtCategory";
             this.txtCategory.Size = new System.Drawing.Size(138, 20);
             this.txtCategory.TabIndex = 2;
+            this.toolTip1.SetToolTip(this.txtCategory, "General Category of Component.");
             // 
             // label6
             // 
@@ -149,7 +158,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(328, 264);
+            this.ClientSize = new System.Drawing.Size(322, 264);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.txtCode);
             this.Controls.Add(this.txtCategory);
@@ -162,6 +171,7 @@
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.txtArea);
             this.Controls.Add(this.lblQuestion);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MissingCompDialog";
             this.Text = "No Component Selected From Model";
             this.Load += new System.EventHandler(this.BasicInputDialog_Load);
@@ -184,5 +194,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtCode;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

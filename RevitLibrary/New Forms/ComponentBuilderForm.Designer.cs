@@ -447,6 +447,7 @@
             this.Controls.Add(this.txtSelectedComp);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.grpComponents);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "ComponentBuilderForm";
             this.Text = "Component Builder";
             this.Load += new System.EventHandler(this.ComponentBuilderForm_Load);

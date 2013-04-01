@@ -9,7 +9,6 @@ using System.Windows.Forms;
 using RevitLibrary.DataClasses;
 using RevitLibrary.New_Forms;
 using System.Diagnostics;
-using java.util;
 
 namespace RevitLibrary.Forms
 {
@@ -43,6 +42,7 @@ namespace RevitLibrary.Forms
         private void btnTimeVsCost_Click(object sender, EventArgs e)
         {
             DataVisualizer dvFrm = new DataVisualizer();
+            dvFrm.Owner = this;
             dvFrm.Projects = this.Results;
             dvFrm.CompareType = DataVisualizer.Comparison.TIMEVCOST;
             dvFrm.Show();
@@ -51,6 +51,7 @@ namespace RevitLibrary.Forms
         private void btnTimeVSEI_Click(object sender, EventArgs e)
         {
             DataVisualizer dvFrm = new DataVisualizer();
+            dvFrm.Owner = this;
             dvFrm.Projects = this.Results;
             dvFrm.CompareType = DataVisualizer.Comparison.TIMEVEI;
             dvFrm.Show();
@@ -59,6 +60,7 @@ namespace RevitLibrary.Forms
         private void btnCostVSEI_Click(object sender, EventArgs e)
         {
             DataVisualizer dvFrm = new DataVisualizer();
+            dvFrm.Owner = this;
             dvFrm.Projects = this.Results;
             dvFrm.CompareType = DataVisualizer.Comparison.COSTVEI;
             dvFrm.Show();
@@ -66,16 +68,7 @@ namespace RevitLibrary.Forms
 
         private void btn3D_Click(object sender, EventArgs e)
         {
-            try 
-	        {	        
-		        LinkedList list = ScatterPlot3D.DataReader.readData(this.FileName);
-                ScatterPlot3D.Plotter.testPlot3DScatter(12);
-            }
-	        catch (Exception ex)
-	        {
-		
-		        MessageBox.Show(ex.Message);
-	        }
+            
         }
 
         private void btnSort_Click(object sender, EventArgs e)

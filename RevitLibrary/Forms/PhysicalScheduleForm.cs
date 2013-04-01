@@ -234,6 +234,9 @@ namespace RevitLibrary.Forms
             Node end = g.AddNode("END");
             end.Attr.Color = Microsoft.Glee.Drawing.Color.Red;
 
+            if (rows.Count <= 0)
+                g.AddEdge(start.Id, end.Id);
+
             foreach (DataGridViewRow row in rows)
             {
                 if (row.Cells["pred"].Value == null)

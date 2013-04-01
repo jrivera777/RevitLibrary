@@ -56,7 +56,7 @@ namespace RevitLibrary.New_Forms
                         comp.Category = inputDlg.Category;
 
                         Assembly assoc = new Assembly();
-                        assoc.AssemblyName = inputDlg.Name;
+                        assoc.AssemblyName = inputDlg.CompName;
                         assoc.Category = inputDlg.Category;
                         assoc.Area = inputDlg.Area;
                         assoc.Volume = inputDlg.Volume;
@@ -111,6 +111,11 @@ namespace RevitLibrary.New_Forms
             txtSelectedComp.Clear();
             ClearControls();
         }
+        /// <summary>
+        /// Attempt to write out Components XML file. There must be at least one valid Component defined.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnWrite_Click(object sender, EventArgs e)
         {
             if (lbComponents.Items.Count <= 0)
@@ -377,6 +382,11 @@ namespace RevitLibrary.New_Forms
                     lbCurrentCrew.Items.Add(assem.CurrentCrew);
             }
         }
+        /// <summary>
+        /// Attempt to write out Precedence Order XML file. If no components are defined, this is essentially useless.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnOrderComponents_Click(object sender, EventArgs e)
         {
             using (PhysicalScheduleForm phyFrm = new PhysicalScheduleForm())
@@ -427,6 +437,11 @@ namespace RevitLibrary.New_Forms
                 }
             }
         }
+        /// <summary>
+        /// Asks for Component and Precendence Order XMLf files, and runs the NSGAII process, generating results in another XML file.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnNSGAII_Click(object sender, EventArgs e)
         {
             String compFile = "";
@@ -465,8 +480,7 @@ namespace RevitLibrary.New_Forms
                     p.StartInfo.WorkingDirectory = NSGAII_DIR;
                     p.StartInfo.FileName = @"NSGAII.exe";
                     p.StartInfo.Arguments = "\"" + compFile + "\"  \"" + orderFile + "\"";
-                    p.StartInfo.CreateNoWindow = true;
-                    p.StartInfo.UseShellExecute = true;
+                    p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
                     p.Start();
                     p.WaitForExit();
                 }
