@@ -183,7 +183,6 @@ namespace RevitLibrary.New_Forms
             }
         }
 
-
         private class CostComparer : IComparer<ProjectResult>
         {
             public int Compare(ProjectResult x, ProjectResult y)
@@ -255,7 +254,6 @@ namespace RevitLibrary.New_Forms
 
             return Amount;
         }
-
         public int FindBound(int val, Boolean upper)
         {
             int temp = val;

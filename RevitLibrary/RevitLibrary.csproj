@@ -123,6 +123,12 @@
     <Compile Include="New Forms\NewOptionForm.Designer.cs">
       <DependentUpon>NewOptionForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="New Forms\ResultSelectedAssembliesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="New Forms\ResultSelectedAssembliesForm.Designer.cs">
+      <DependentUpon>ResultSelectedAssembliesForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="New Forms\ResultsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -199,6 +205,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="New Forms\NewOptionForm.resx">
       <DependentUpon>NewOptionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="New Forms\ResultSelectedAssembliesForm.resx">
+      <DependentUpon>ResultSelectedAssembliesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="New Forms\ResultsForm.resx">
       <DependentUpon>ResultsForm.cs</DependentUpon>

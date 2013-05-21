@@ -32,18 +32,35 @@ namespace RevitLibrary.New_Forms
         }
         private void btnAdd_Click(object sender, EventArgs e)
         {
+            Boolean missing = false;
             if (String.IsNullOrEmpty(txtCompName.Text))
             {
                 MessageBox.Show("Please enter a component name.");
                 return;
             }
-       
+
             BuildingComponent comp = null;
-            if (cboFoundInModel.SelectedIndex < 0)
+            if (!chkCombineComps.Checked)
+                missing = cboFoundInModel.SelectedIndex < 0;
+            else
+            {
+                if (String.IsNullOrEmpty(txtCombinedCompName.Text))
+                {
+                    MessageBox.Show("Please enter a name for the combined components.");
+                    return;
+                }
+                if (String.IsNullOrEmpty(txtCombinedCompName.Text))
+                {
+                    MessageBox.Show("Please enter a category for the combined components.");
+                    return;
+                }
+                missing = String.IsNullOrEmpty(txtCombinedArea.Text) || String.IsNullOrEmpty(txtCombinedVolume.Text);
+            }
+
+            if (missing)
             {
                 using (MissingCompDialog inputDlg = new MissingCompDialog())
                 {
-                    
                     inputDlg.ShowDialog();
                     if (inputDlg.DialogResult == DialogResult.OK)
                     {
@@ -74,14 +91,27 @@ namespace RevitLibrary.New_Forms
             }
             else
             {
-                comp = new BuildingComponent();
-                Assembly assoc = (Assembly)cboFoundInModel.SelectedItem;    
-                comp.Name = txtCompName.Text;
-                comp.Description = txtCompDesc.Text.Trim();
-                comp.Category = txtCategory.Text;
-                comp.Area = assoc.Area;
-                comp.Volume = assoc.Volume;
+                if (!chkCombineComps.Checked)
+                {
+                    comp = new BuildingComponent();
+                    Assembly assoc = (Assembly)cboFoundInModel.SelectedItem;
+                    comp.Name = txtCompName.Text;
+                    comp.Description = txtCompDesc.Text.Trim();
+                    comp.Category = txtCategory.Text;
+                    comp.Area = assoc.Area;
+                    comp.Volume = assoc.Volume;
+                }
+                else
+                {
+                    comp = new BuildingComponent();
+                    comp.Name = txtCompName.Text;
+                    comp.Description = txtCompDesc.Text.Trim();
+                    comp.Category = txtCombinedCategory.Text;
+                    comp.Area = Double.Parse(txtCombinedArea.Text);
+                    comp.Volume = Double.Parse(txtCombinedVolume.Text);
+                }
             }
+
             if (comp == null)
                 return;
             if (!lbComponents.Items.Contains(comp))
@@ -91,6 +121,11 @@ namespace RevitLibrary.New_Forms
 
             ClearControls();
             clearComponentInfo();
+
+            txtCombinedCompName.Text = "";
+            txtCombinedCategory.Text = "";
+            txtCombinedArea.Text = "";
+            txtCombinedVolume.Text = "";
         }
         private void ClearControls()
         {
@@ -132,7 +167,7 @@ namespace RevitLibrary.New_Forms
                 if (!String.IsNullOrEmpty(saveDlg.FileName))
                 {
                     List<BuildingComponent> compsToWrite = new List<BuildingComponent>();
-                    foreach(Object obj in lbComponents.Items)
+                    foreach (Object obj in lbComponents.Items)
                         compsToWrite.Add((BuildingComponent)obj);
 
 
@@ -163,7 +198,7 @@ namespace RevitLibrary.New_Forms
                         writer.WriteStartElement("Alternative");
                         writer.WriteElementString("Name", opt.AssemblyName);
                         writer.WriteElementString("Code", opt.AssemblyCode);
-                        
+
                         double cost = opt.CalculateCostPerUnit();
                         double co2 = opt.CalculateCO2PerUnit();
                         double duration = opt.CalculateRoughDuration(bComp.Area, bComp.Volume);
@@ -209,8 +244,6 @@ namespace RevitLibrary.New_Forms
                 if (!cboFoundInModel.Items.Contains(assem))
                     cboFoundInModel.Items.Add(assem);
             }
-            //Components found in model.
-            //cboFoundInModel.Items.AddRange(foundInModel.ToArray());
         }
         private void clearComponentInfo()
         {
@@ -282,7 +315,7 @@ namespace RevitLibrary.New_Forms
         }
         private void lbAssemblies_MouseDoubleClick(object sender, MouseEventArgs args)
         {
-            if(lbAssemblies.SelectedIndex >= 0)
+            if (lbAssemblies.SelectedIndex >= 0)
             {
                 Assembly assem = (Assembly)lbAssemblies.SelectedItem;
                 AssemblyDetailsForm detFrm = new AssemblyDetailsForm();
@@ -314,8 +347,8 @@ namespace RevitLibrary.New_Forms
         {
             if (lbCurrentCrew.SelectedIndex >= 0)
             {
-               lbCurrentCrew.Items.RemoveAt(lbCurrentCrew.SelectedIndex);
-               ((Assembly)lbCurrentOptions.SelectedItem).CurrentCrew = null;
+                lbCurrentCrew.Items.RemoveAt(lbCurrentCrew.SelectedIndex);
+                ((Assembly)lbCurrentOptions.SelectedItem).CurrentCrew = null;
             }
         }
         public void lbCrewOptions_MouseDoubleClick(object sender, MouseEventArgs args)
@@ -392,9 +425,9 @@ namespace RevitLibrary.New_Forms
             using (PhysicalScheduleForm phyFrm = new PhysicalScheduleForm())
             {
                 List<BuildingComponent> comps = new List<BuildingComponent>();
-                for(int i =0; i < lbComponents.Items.Count; i++)
+                for (int i = 0; i < lbComponents.Items.Count; i++)
                 {
-                    comps.Add((BuildingComponent) lbComponents.Items[i]);
+                    comps.Add((BuildingComponent)lbComponents.Items[i]);
                 }
 
                 phyFrm.Components = comps;
@@ -411,7 +444,7 @@ namespace RevitLibrary.New_Forms
             }
             using (NewOptionForm optFrm = new NewOptionForm())
             {
-                if(lbComponents.SelectedIndex >= 0)
+                if (lbComponents.SelectedIndex >= 0)
                 {
                     optFrm.AssemCategory = ((BuildingComponent)lbComponents.SelectedItem).Category;
                     optFrm.CompArea = ((BuildingComponent)lbComponents.SelectedItem).Area;
@@ -495,6 +528,47 @@ namespace RevitLibrary.New_Forms
             lbCrewOptions.Items.Clear();
             lbCurrentCrew.Items.Clear();
             lbCurrentOptions.ClearSelected();
+        }
+
+        private void chkCombineComps_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkCombineComps.Checked)
+            {
+                grpCombined.Enabled = true;
+                btnCombineComp.Enabled = true;
+            }
+            else
+            {
+                btnCombineComp.Enabled = false;
+                grpCombined.Enabled = false;
+                txtCombinedCompName.Text = "";
+                txtCombinedCategory.Text = "";
+                txtCombinedArea.Text = "";
+                txtCombinedVolume.Text = "";
+            }
+        }
+
+        private void btnCombineComp_Click(object sender, EventArgs e)
+        {
+            if (cboFoundInModel.SelectedIndex < 0)
+            {
+                MessageBox.Show("No Component in the model was selected.");
+                return;
+            }
+
+            Assembly assoc = (Assembly)cboFoundInModel.SelectedItem;
+
+            if (String.IsNullOrEmpty(txtCombinedArea.Text) || String.IsNullOrEmpty(txtCombinedVolume.Text))
+            {
+                txtCombinedArea.Text = assoc.Area.ToString();
+                txtCombinedVolume.Text = assoc.Volume.ToString();
+            }
+            else
+            {
+                txtCombinedArea.Text = (Double.Parse(txtCombinedArea.Text) + assoc.Area).ToString();
+                txtCombinedVolume.Text = (Double.Parse(txtCombinedVolume.Text) + assoc.Volume).ToString();
+            }
+            ClearControls();
         }
     }
 }

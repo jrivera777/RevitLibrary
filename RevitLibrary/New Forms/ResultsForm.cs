@@ -38,7 +38,16 @@ namespace RevitLibrary.Forms
                 txtDuration.Text = proj.TotalDuration.ToString();
             }
         }
-
+        private void lbProjects_MouseDoubleClick(object sender, MouseEventArgs args)
+        {
+            if (lbProjects.SelectedIndex >= 0)
+            {
+                ProjectResult res = (ProjectResult)lbProjects.SelectedItem;
+                ResultSelectedAssembliesForm rFrm = new ResultSelectedAssembliesForm();
+                rFrm.Project = res;
+                rFrm.Show();        
+            }
+        }
         private void btnTimeVsCost_Click(object sender, EventArgs e)
         {
             DataVisualizer dvFrm = new DataVisualizer();

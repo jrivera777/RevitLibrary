@@ -126,14 +126,21 @@ namespace RevitLibrary
                         res.TotalEI = Double.Parse(children[1].InnerText);
                         res.TotalDuration = Double.Parse(children[2].InnerText);
 
+                        res.SelectedAssemblies = new List<Assembly>();
                         //get selected assemblies for each project
                         for (int i = 3; i < children.Count; i++)
                         {
                             XmlNode component = children[i];
-                            XmlNodeList compData = node.ChildNodes;
+                            XmlNodeList compData = component.ChildNodes;
+                            Assembly assem = new Assembly();
+                            assem.Category = component.Attributes["id"].Value;
+                            assem.AssemblyName = compData[0].InnerText;
+                            assem.Cost = Double.Parse(compData[1].InnerText);
+                            assem.CO2 = Double.Parse(compData[2].InnerText);
+                            assem.Duration = Double.Parse(compData[3].InnerText);
+                            res.SelectedAssemblies.Add(assem);
                         }
 
-                        //add only unique projects
                         if (!results.Contains(res))
                             results.Add(res);
                     }

@@ -134,6 +134,7 @@
             this.lbProjects.Size = new System.Drawing.Size(512, 173);
             this.lbProjects.TabIndex = 10;
             this.lbProjects.SelectedIndexChanged += new System.EventHandler(this.lbProjects_SelectedIndexChanged);
+            this.lbProjects.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(lbProjects_MouseDoubleClick);
             // 
             // btnTimeVsCost
             // 
