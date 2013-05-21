@@ -809,12 +809,12 @@ namespace RevitLibrary
                 conn.Open();
                 using (OleDbCommand comm = conn.CreateCommand())
                 {
+                    comm.Parameters.Clear();
                     comm.CommandType = CommandType.Text;
                     if (max < 0)
-                        comm.CommandText = "Select CrewName, BareHourlyCost, BareDailyCost, Details FROM Crew WHERE Category=?";
+                        comm.CommandText = "Select CrewName, BareHourlyCost, BareDailyCost, Details FROM Crew";
                     else
-                        comm.CommandText = "Select TOP " + max + " CrewName, BareHourlyCost, BareDailyCost, Details FROM Crew WHERE Category=?";
-                    comm.Parameters.AddWithValue("@cat", category);
+                        comm.CommandText = "Select TOP " + max + " CrewName, BareHourlyCost, BareDailyCost, Details FROM Crew";
 
                     using (OleDbDataReader reader = comm.ExecuteReader())
                     {
