@@ -148,10 +148,7 @@ namespace RevitLibrary
             }
 
             if (results.Count <= 0)
-            {
-                //MessageBox.Show("Failed to read Results.");
                 return;
-            }
 
             using (ResultsForm resFrm = new ResultsForm())
             {
@@ -169,7 +166,7 @@ namespace RevitLibrary
             //cats.Add(BuiltInCategory.OST_StructuralFoundation);
 
             //CreateFamilyTree(RevitDocument);
-            MessageBox.Show(Math.Floor(105060.0).ToString());
+            
         }
         public void CreateFamilyTree(Document myDoc)
         {
