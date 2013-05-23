@@ -405,15 +405,16 @@ namespace RevitLibrary.New_Forms
         }
         private void lbCurrentOptions_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (lbCurrentOptions.SelectedIndex >= 0)
-            {
-                lbCurrentCrew.Items.Clear();
-                lbCrewOptions.Items.Clear();
-                Assembly assem = (Assembly)lbCurrentOptions.SelectedItem;
-                lbCrewOptions.Items.AddRange(manager.getCrewsByCategory(assem.Category, -1).ToArray());
-                if (assem.CurrentCrew != null)
-                    lbCurrentCrew.Items.Add(assem.CurrentCrew);
-            }
+            //NOTE: Window Shrunk to hide components.
+            //if (lbCurrentOptions.SelectedIndex >= 0)
+            //{
+            //    lbCurrentCrew.Items.Clear();
+            //    lbCrewOptions.Items.Clear();
+            //    Assembly assem = (Assembly)lbCurrentOptions.SelectedItem;
+            //    lbCrewOptions.Items.AddRange(manager.getCrewsByCategory(assem.Category, -1).ToArray());
+            //    if (assem.CurrentCrew != null)
+            //        lbCurrentCrew.Items.Add(assem.CurrentCrew);
+            //}
         }
         /// <summary>
         /// Attempt to write out Precedence Order XML file. If no components are defined, this is essentially useless.

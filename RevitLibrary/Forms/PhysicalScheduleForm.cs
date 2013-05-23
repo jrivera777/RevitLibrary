@@ -216,8 +216,15 @@ namespace RevitLibrary.Forms
         private void btnDrawGraph_Click(object sender, EventArgs e)
         {
             GViewer gView = (GViewer)graphPanel.Controls["GraphViewer"];
-            Graph g = GenerateGraph(dgvSchedule.Rows);
-            gView.Graph = g;
+            try
+            {
+                Graph g = GenerateGraph(dgvSchedule.Rows);
+                gView.Graph = g;
+            }
+            catch (NullReferenceException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         /// <summary>
@@ -227,6 +234,7 @@ namespace RevitLibrary.Forms
         private Graph GenerateGraph(DataGridViewRowCollection rows)
         {
             Graph g = new Graph("Schedule");
+            List<Edge> startEdges = new List<Edge>();
             Edge currEdge;
 
             Node start = g.AddNode("START");
@@ -258,14 +266,38 @@ namespace RevitLibrary.Forms
                     g.AddEdge(predNode.Id, currNode.Id);
                 }
                 else if (predNode.Id.Equals(start.Id))
-                    g.AddEdge(start.Id, currNode.Id);
+                {
+                    bool exists = false;
+                    foreach (Edge ed in start.OutEdges)
+                    {
+                        if (ed.Target.Equals(currNode.Id))
+                        {
+                            exists = true;
+                            break;
+                        }
+                    }
+                    if(!exists)
+                        g.AddEdge(start.Id, currNode.Id);
+                }
                 if (succNode == null)
                 {
                     succNode = g.AddNode(succ);
                     g.AddEdge(currNode.Id, succNode.Id);
                 }
                 else if (succNode.Id.Equals(end.Id))
-                    g.AddEdge(currNode.Id, end.Id);
+                {
+                    bool exists = false;
+                    foreach (Edge ed in end.InEdges)
+                    {
+                        if (ed.Source.Equals(currNode.Id))
+                        {
+                            exists = true;
+                            break;
+                        }
+                    }
+                    if (!exists)
+                        g.AddEdge(currNode.Id, end.Id);
+                }
                 else
                     g.AddEdge(currNode.Id, succNode.Id);
             }

@@ -58,18 +58,20 @@
             // 
             // btnWalls
             // 
-            this.btnWalls.Location = new System.Drawing.Point(12, 129);
+            this.btnWalls.Enabled = false;
+            this.btnWalls.Location = new System.Drawing.Point(253, 129);
             this.btnWalls.Name = "btnWalls";
             this.btnWalls.Size = new System.Drawing.Size(159, 23);
             this.btnWalls.TabIndex = 2;
             this.btnWalls.Text = "Select Walls";
             this.toolTip1.SetToolTip(this.btnWalls, "For Testing Purposes.");
             this.btnWalls.UseVisualStyleBackColor = true;
+            this.btnWalls.Visible = false;
             this.btnWalls.Click += new System.EventHandler(this.btnWalls_Click);
             // 
             // btnComponentBuilder
             // 
-            this.btnComponentBuilder.Location = new System.Drawing.Point(177, 129);
+            this.btnComponentBuilder.Location = new System.Drawing.Point(12, 129);
             this.btnComponentBuilder.Name = "btnComponentBuilder";
             this.btnComponentBuilder.Size = new System.Drawing.Size(116, 23);
             this.btnComponentBuilder.TabIndex = 6;
@@ -80,7 +82,7 @@
             // 
             // btnViewResults
             // 
-            this.btnViewResults.Location = new System.Drawing.Point(299, 129);
+            this.btnViewResults.Location = new System.Drawing.Point(131, 129);
             this.btnViewResults.Name = "btnViewResults";
             this.btnViewResults.Size = new System.Drawing.Size(116, 23);
             this.btnViewResults.TabIndex = 7;
@@ -101,6 +103,7 @@
             // 
             // btnFamily
             // 
+            this.btnFamily.Enabled = false;
             this.btnFamily.Location = new System.Drawing.Point(418, 129);
             this.btnFamily.Name = "btnFamily";
             this.btnFamily.Size = new System.Drawing.Size(159, 23);
@@ -108,6 +111,7 @@
             this.btnFamily.Text = "Test Family";
             this.toolTip1.SetToolTip(this.btnFamily, "For Testing Purposes.");
             this.btnFamily.UseVisualStyleBackColor = true;
+            this.btnFamily.Visible = false;
             this.btnFamily.Click += new System.EventHandler(this.btnFamily_Click);
             // 
             // ModelManagerForm

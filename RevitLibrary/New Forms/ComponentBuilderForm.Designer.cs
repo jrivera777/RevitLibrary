@@ -83,7 +83,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(61, 363);
+            this.label5.Location = new System.Drawing.Point(61, 370);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(95, 13);
             this.label5.TabIndex = 1;
@@ -91,7 +91,7 @@
             // 
             // txtSelectedComp
             // 
-            this.txtSelectedComp.Location = new System.Drawing.Point(171, 360);
+            this.txtSelectedComp.Location = new System.Drawing.Point(171, 367);
             this.txtSelectedComp.Name = "txtSelectedComp";
             this.txtSelectedComp.ReadOnly = true;
             this.txtSelectedComp.Size = new System.Drawing.Size(141, 20);
@@ -100,7 +100,7 @@
             // lbAssemblies
             // 
             this.lbAssemblies.FormattingEnabled = true;
-            this.lbAssemblies.Location = new System.Drawing.Point(171, 399);
+            this.lbAssemblies.Location = new System.Drawing.Point(171, 406);
             this.lbAssemblies.Name = "lbAssemblies";
             this.lbAssemblies.Size = new System.Drawing.Size(141, 121);
             this.lbAssemblies.TabIndex = 3;
@@ -110,7 +110,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(17, 399);
+            this.label6.Location = new System.Drawing.Point(17, 406);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(139, 13);
             this.label6.TabIndex = 4;
@@ -119,7 +119,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(580, 35);
+            this.label1.Location = new System.Drawing.Point(378, 38);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(120, 13);
             this.label1.TabIndex = 0;
@@ -127,7 +127,7 @@
             // 
             // txtCompName
             // 
-            this.txtCompName.Location = new System.Drawing.Point(714, 32);
+            this.txtCompName.Location = new System.Drawing.Point(512, 35);
             this.txtCompName.Name = "txtCompName";
             this.txtCompName.Size = new System.Drawing.Size(141, 20);
             this.txtCompName.TabIndex = 1;
@@ -135,7 +135,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(580, 61);
+            this.label2.Location = new System.Drawing.Point(378, 64);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(63, 13);
             this.label2.TabIndex = 2;
@@ -143,14 +143,14 @@
             // 
             // txtCompDesc
             // 
-            this.txtCompDesc.Location = new System.Drawing.Point(714, 58);
+            this.txtCompDesc.Location = new System.Drawing.Point(512, 61);
             this.txtCompDesc.Name = "txtCompDesc";
             this.txtCompDesc.Size = new System.Drawing.Size(141, 20);
             this.txtCompDesc.TabIndex = 2;
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(575, 204);
+            this.btnAdd.Location = new System.Drawing.Point(373, 207);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(133, 23);
             this.btnAdd.TabIndex = 4;
@@ -161,7 +161,7 @@
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(575, 233);
+            this.btnDelete.Location = new System.Drawing.Point(373, 236);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(133, 23);
             this.btnDelete.TabIndex = 5;
@@ -173,7 +173,7 @@
             // btnWrite
             // 
             this.btnWrite.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnWrite.Location = new System.Drawing.Point(693, 399);
+            this.btnWrite.Location = new System.Drawing.Point(675, 27);
             this.btnWrite.Name = "btnWrite";
             this.btnWrite.Size = new System.Drawing.Size(202, 33);
             this.btnWrite.TabIndex = 6;
@@ -185,7 +185,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(580, 88);
+            this.label4.Location = new System.Drawing.Point(378, 91);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(52, 13);
             this.label4.TabIndex = 9;
@@ -213,7 +213,7 @@
             // 
             // txtCategory
             // 
-            this.txtCategory.Location = new System.Drawing.Point(714, 85);
+            this.txtCategory.Location = new System.Drawing.Point(512, 88);
             this.txtCategory.Name = "txtCategory";
             this.txtCategory.ReadOnly = true;
             this.txtCategory.Size = new System.Drawing.Size(141, 20);
@@ -261,8 +261,10 @@
             this.grpComponents.Controls.Add(this.label3);
             this.grpComponents.Controls.Add(this.txtArea);
             this.grpComponents.Controls.Add(this.lbComponents);
+            this.grpComponents.Controls.Add(this.btnNSGAII);
             this.grpComponents.Controls.Add(this.label9);
             this.grpComponents.Controls.Add(this.txtVolume);
+            this.grpComponents.Controls.Add(this.btnOrderComponents);
             this.grpComponents.Controls.Add(this.label8);
             this.grpComponents.Controls.Add(this.txtCategory);
             this.grpComponents.Controls.Add(this.cboFoundInModel);
@@ -273,10 +275,11 @@
             this.grpComponents.Controls.Add(this.txtCompDesc);
             this.grpComponents.Controls.Add(this.label2);
             this.grpComponents.Controls.Add(this.txtCompName);
+            this.grpComponents.Controls.Add(this.btnWrite);
             this.grpComponents.Controls.Add(this.label1);
             this.grpComponents.Location = new System.Drawing.Point(12, 12);
             this.grpComponents.Name = "grpComponents";
-            this.grpComponents.Size = new System.Drawing.Size(883, 331);
+            this.grpComponents.Size = new System.Drawing.Size(883, 342);
             this.grpComponents.TabIndex = 0;
             this.grpComponents.TabStop = false;
             this.grpComponents.Text = "Component Information";
@@ -284,7 +287,7 @@
             // btnNSGAII
             // 
             this.btnNSGAII.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNSGAII.Location = new System.Drawing.Point(693, 477);
+            this.btnNSGAII.Location = new System.Drawing.Point(675, 105);
             this.btnNSGAII.Name = "btnNSGAII";
             this.btnNSGAII.Size = new System.Drawing.Size(202, 33);
             this.btnNSGAII.TabIndex = 20;
@@ -297,7 +300,7 @@
             // btnOrderComponents
             // 
             this.btnOrderComponents.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOrderComponents.Location = new System.Drawing.Point(693, 438);
+            this.btnOrderComponents.Location = new System.Drawing.Point(675, 66);
             this.btnOrderComponents.Name = "btnOrderComponents";
             this.btnOrderComponents.Size = new System.Drawing.Size(202, 33);
             this.btnOrderComponents.TabIndex = 19;
@@ -309,7 +312,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(711, 183);
+            this.label3.Location = new System.Drawing.Point(509, 186);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(131, 13);
             this.label3.TabIndex = 17;
@@ -318,7 +321,7 @@
             // lbComponents
             // 
             this.lbComponents.FormattingEnabled = true;
-            this.lbComponents.Location = new System.Drawing.Point(714, 204);
+            this.lbComponents.Location = new System.Drawing.Point(512, 207);
             this.lbComponents.Name = "lbComponents";
             this.lbComponents.Size = new System.Drawing.Size(141, 121);
             this.lbComponents.TabIndex = 18;
@@ -327,7 +330,7 @@
             // lbCurrentOptions
             // 
             this.lbCurrentOptions.FormattingEnabled = true;
-            this.lbCurrentOptions.Location = new System.Drawing.Point(472, 399);
+            this.lbCurrentOptions.Location = new System.Drawing.Point(524, 406);
             this.lbCurrentOptions.Name = "lbCurrentOptions";
             this.lbCurrentOptions.Size = new System.Drawing.Size(141, 121);
             this.lbCurrentOptions.TabIndex = 21;
@@ -336,7 +339,7 @@
             // 
             // btnDeleteOption
             // 
-            this.btnDeleteOption.Location = new System.Drawing.Point(330, 426);
+            this.btnDeleteOption.Location = new System.Drawing.Point(382, 433);
             this.btnDeleteOption.Name = "btnDeleteOption";
             this.btnDeleteOption.Size = new System.Drawing.Size(136, 23);
             this.btnDeleteOption.TabIndex = 20;
@@ -347,7 +350,7 @@
             // 
             // btnAddOption
             // 
-            this.btnAddOption.Location = new System.Drawing.Point(20, 426);
+            this.btnAddOption.Location = new System.Drawing.Point(20, 433);
             this.btnAddOption.Name = "btnAddOption";
             this.btnAddOption.Size = new System.Drawing.Size(136, 23);
             this.btnAddOption.TabIndex = 19;
@@ -359,7 +362,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(330, 399);
+            this.label10.Location = new System.Drawing.Point(382, 406);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(130, 13);
             this.label10.TabIndex = 22;
@@ -374,6 +377,7 @@
             this.btnAddCrewOption.TabIndex = 25;
             this.btnAddCrewOption.Text = "Add Crew Option";
             this.btnAddCrewOption.UseVisualStyleBackColor = true;
+            this.btnAddCrewOption.Visible = false;
             this.btnAddCrewOption.Click += new System.EventHandler(this.btnAddCrewOption_Click);
             // 
             // label11
@@ -385,6 +389,7 @@
             this.label11.Size = new System.Drawing.Size(119, 13);
             this.label11.TabIndex = 24;
             this.label11.Text = "Available Crew Options:";
+            this.label11.Visible = false;
             // 
             // lbCrewOptions
             // 
@@ -394,6 +399,7 @@
             this.lbCrewOptions.Name = "lbCrewOptions";
             this.lbCrewOptions.Size = new System.Drawing.Size(141, 121);
             this.lbCrewOptions.TabIndex = 23;
+            this.lbCrewOptions.Visible = false;
             this.lbCrewOptions.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lbCrewOptions_MouseDoubleClick);
             // 
             // btnDeleteCrew
@@ -405,6 +411,7 @@
             this.btnDeleteCrew.TabIndex = 28;
             this.btnDeleteCrew.Text = "Delete Crew Option";
             this.btnDeleteCrew.UseVisualStyleBackColor = true;
+            this.btnDeleteCrew.Visible = false;
             this.btnDeleteCrew.Click += new System.EventHandler(this.btnDeleteCrew_Click);
             // 
             // label12
@@ -416,6 +423,7 @@
             this.label12.Size = new System.Drawing.Size(110, 13);
             this.label12.TabIndex = 27;
             this.label12.Text = "Current Crew Options:";
+            this.label12.Visible = false;
             // 
             // lbCurrentCrew
             // 
@@ -425,11 +433,12 @@
             this.lbCurrentCrew.Name = "lbCurrentCrew";
             this.lbCurrentCrew.Size = new System.Drawing.Size(141, 121);
             this.lbCurrentCrew.TabIndex = 26;
+            this.lbCurrentCrew.Visible = false;
             this.lbCurrentCrew.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lbCrewOptions_MouseDoubleClick);
             // 
             // btnCreateNewOption
             // 
-            this.btnCreateNewOption.Location = new System.Drawing.Point(330, 455);
+            this.btnCreateNewOption.Location = new System.Drawing.Point(382, 462);
             this.btnCreateNewOption.Name = "btnCreateNewOption";
             this.btnCreateNewOption.Size = new System.Drawing.Size(136, 23);
             this.btnCreateNewOption.TabIndex = 29;
@@ -548,16 +557,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(906, 681);
+            this.ClientSize = new System.Drawing.Size(906, 539);
             this.Controls.Add(this.btnCreateNewOption);
             this.Controls.Add(this.btnDeleteCrew);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.lbCurrentCrew);
             this.Controls.Add(this.btnAddCrewOption);
             this.Controls.Add(this.label11);
-            this.Controls.Add(this.btnNSGAII);
             this.Controls.Add(this.lbCrewOptions);
-            this.Controls.Add(this.btnOrderComponents);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.lbCurrentOptions);
             this.Controls.Add(this.btnDeleteOption);
@@ -567,7 +574,6 @@
             this.Controls.Add(this.txtSelectedComp);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.grpComponents);
-            this.Controls.Add(this.btnWrite);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "ComponentBuilderForm";
             this.Text = "Component Builder";
