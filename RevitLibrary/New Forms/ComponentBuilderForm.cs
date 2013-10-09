@@ -25,6 +25,7 @@ namespace RevitLibrary.New_Forms
         private Dictionary<String, double> volumes = new Dictionary<string, double>();
         private Dictionary<String, Assembly> Assemblies = new Dictionary<string, Assembly>();
         private Dictionary<String, BuildingComponent> comps = new Dictionary<String, BuildingComponent>();
+        private List<Assembly> foundInModel = new List<Assembly>();
         public Document RevitDocument { get; set; }
         public ComponentBuilderForm()
         {
@@ -229,9 +230,7 @@ namespace RevitLibrary.New_Forms
         private void ComponentBuilderForm_Load(object sender, EventArgs e)
         {
             manager = new ElementManager(this.RevitDocument);
-
-            List<Assembly> foundInModel = new List<Assembly>();
-
+            
             foundInModel = manager.RetrieveWallInfo();
             foundInModel.AddRange(manager.RetrieveRoofingInfo());
             foundInModel.AddRange(manager.RetrieveFloorInfo());
@@ -570,6 +569,15 @@ namespace RevitLibrary.New_Forms
                 txtCombinedVolume.Text = (Double.Parse(txtCombinedVolume.Text) + assoc.Volume).ToString();
             }
             ClearControls();
+        }
+
+        private void btnLoadZones_Click(object sender, EventArgs e)
+        {
+            using (LoadZonesForm zFrm = new LoadZonesForm())
+            {
+                zFrm.modelElements = foundInModel;
+                zFrm.ShowDialog();
+            }
         }
     }
 }

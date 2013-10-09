@@ -49,10 +49,21 @@
             this.label9 = new System.Windows.Forms.Label();
             this.txtArea = new System.Windows.Forms.TextBox();
             this.grpComponents = new System.Windows.Forms.GroupBox();
-            this.btnNSGAII = new System.Windows.Forms.Button();
-            this.btnOrderComponents = new System.Windows.Forms.Button();
+            this.btnCombineComp = new System.Windows.Forms.Button();
+            this.grpCombined = new System.Windows.Forms.GroupBox();
+            this.txtCombinedCategory = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.txtCombinedCompName = new System.Windows.Forms.TextBox();
+            this.txtCombinedArea = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.txtCombinedVolume = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.chkCombineComps = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.lbComponents = new System.Windows.Forms.ListBox();
+            this.btnNSGAII = new System.Windows.Forms.Button();
+            this.btnOrderComponents = new System.Windows.Forms.Button();
             this.lbCurrentOptions = new System.Windows.Forms.ListBox();
             this.btnDeleteOption = new System.Windows.Forms.Button();
             this.btnAddOption = new System.Windows.Forms.Button();
@@ -65,17 +76,7 @@
             this.lbCurrentCrew = new System.Windows.Forms.ListBox();
             this.btnCreateNewOption = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.txtCombinedCompName = new System.Windows.Forms.TextBox();
-            this.txtCombinedArea = new System.Windows.Forms.TextBox();
-            this.txtCombinedVolume = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.chkCombineComps = new System.Windows.Forms.CheckBox();
-            this.grpCombined = new System.Windows.Forms.GroupBox();
-            this.txtCombinedCategory = new System.Windows.Forms.TextBox();
-            this.label16 = new System.Windows.Forms.Label();
-            this.btnCombineComp = new System.Windows.Forms.Button();
+            this.btnLoadZones = new System.Windows.Forms.Button();
             this.grpComponents.SuspendLayout();
             this.grpCombined.SuspendLayout();
             this.SuspendLayout();
@@ -173,7 +174,7 @@
             // btnWrite
             // 
             this.btnWrite.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnWrite.Location = new System.Drawing.Point(675, 27);
+            this.btnWrite.Location = new System.Drawing.Point(675, 68);
             this.btnWrite.Name = "btnWrite";
             this.btnWrite.Size = new System.Drawing.Size(202, 33);
             this.btnWrite.TabIndex = 6;
@@ -255,6 +256,7 @@
             // 
             // grpComponents
             // 
+            this.grpComponents.Controls.Add(this.btnLoadZones);
             this.grpComponents.Controls.Add(this.btnCombineComp);
             this.grpComponents.Controls.Add(this.grpCombined);
             this.grpComponents.Controls.Add(this.chkCombineComps);
@@ -284,30 +286,111 @@
             this.grpComponents.TabStop = false;
             this.grpComponents.Text = "Component Information";
             // 
-            // btnNSGAII
+            // btnCombineComp
             // 
-            this.btnNSGAII.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNSGAII.Location = new System.Drawing.Point(675, 105);
-            this.btnNSGAII.Name = "btnNSGAII";
-            this.btnNSGAII.Size = new System.Drawing.Size(202, 33);
-            this.btnNSGAII.TabIndex = 20;
-            this.btnNSGAII.Text = "Run NSGA-II";
-            this.toolTip1.SetToolTip(this.btnNSGAII, "Run genetic algorithm simulation. Results can be viewed from the Model Manager Fo" +
-                    "rm.");
-            this.btnNSGAII.UseVisualStyleBackColor = true;
-            this.btnNSGAII.Click += new System.EventHandler(this.btnNSGAII_Click);
+            this.btnCombineComp.Enabled = false;
+            this.btnCombineComp.Location = new System.Drawing.Point(200, 125);
+            this.btnCombineComp.Name = "btnCombineComp";
+            this.btnCombineComp.Size = new System.Drawing.Size(158, 23);
+            this.btnCombineComp.TabIndex = 29;
+            this.btnCombineComp.Text = "Combine Component";
+            this.btnCombineComp.UseVisualStyleBackColor = true;
+            this.btnCombineComp.Click += new System.EventHandler(this.btnCombineComp_Click);
             // 
-            // btnOrderComponents
+            // grpCombined
             // 
-            this.btnOrderComponents.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOrderComponents.Location = new System.Drawing.Point(675, 66);
-            this.btnOrderComponents.Name = "btnOrderComponents";
-            this.btnOrderComponents.Size = new System.Drawing.Size(202, 33);
-            this.btnOrderComponents.TabIndex = 19;
-            this.btnOrderComponents.Text = "Write Out Order";
-            this.toolTip1.SetToolTip(this.btnOrderComponents, "Create a precedence order file.");
-            this.btnOrderComponents.UseVisualStyleBackColor = true;
-            this.btnOrderComponents.Click += new System.EventHandler(this.btnOrderComponents_Click);
+            this.grpCombined.Controls.Add(this.txtCombinedCategory);
+            this.grpCombined.Controls.Add(this.label16);
+            this.grpCombined.Controls.Add(this.txtCombinedCompName);
+            this.grpCombined.Controls.Add(this.txtCombinedArea);
+            this.grpCombined.Controls.Add(this.label15);
+            this.grpCombined.Controls.Add(this.txtCombinedVolume);
+            this.grpCombined.Controls.Add(this.label14);
+            this.grpCombined.Controls.Add(this.label13);
+            this.grpCombined.Enabled = false;
+            this.grpCombined.Location = new System.Drawing.Point(11, 158);
+            this.grpCombined.Name = "grpCombined";
+            this.grpCombined.Size = new System.Drawing.Size(353, 154);
+            this.grpCombined.TabIndex = 28;
+            this.grpCombined.TabStop = false;
+            this.grpCombined.Text = "Combined Component Info";
+            // 
+            // txtCombinedCategory
+            // 
+            this.txtCombinedCategory.Location = new System.Drawing.Point(189, 51);
+            this.txtCombinedCategory.Name = "txtCombinedCategory";
+            this.txtCombinedCategory.Size = new System.Drawing.Size(158, 20);
+            this.txtCombinedCategory.TabIndex = 27;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(6, 54);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(159, 13);
+            this.label16.TabIndex = 28;
+            this.label16.Text = "Combined Component Category:";
+            // 
+            // txtCombinedCompName
+            // 
+            this.txtCombinedCompName.Location = new System.Drawing.Point(189, 25);
+            this.txtCombinedCompName.Name = "txtCombinedCompName";
+            this.txtCombinedCompName.Size = new System.Drawing.Size(158, 20);
+            this.txtCombinedCompName.TabIndex = 21;
+            // 
+            // txtCombinedArea
+            // 
+            this.txtCombinedArea.Location = new System.Drawing.Point(189, 77);
+            this.txtCombinedArea.Name = "txtCombinedArea";
+            this.txtCombinedArea.ReadOnly = true;
+            this.txtCombinedArea.Size = new System.Drawing.Size(158, 20);
+            this.txtCombinedArea.TabIndex = 22;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(6, 106);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(95, 13);
+            this.label15.TabIndex = 26;
+            this.label15.Text = "Combined Volume:";
+            // 
+            // txtCombinedVolume
+            // 
+            this.txtCombinedVolume.Location = new System.Drawing.Point(189, 103);
+            this.txtCombinedVolume.Name = "txtCombinedVolume";
+            this.txtCombinedVolume.ReadOnly = true;
+            this.txtCombinedVolume.Size = new System.Drawing.Size(158, 20);
+            this.txtCombinedVolume.TabIndex = 23;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(6, 80);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(82, 13);
+            this.label14.TabIndex = 25;
+            this.label14.Text = "Combined Area:";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(6, 28);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(145, 13);
+            this.label13.TabIndex = 24;
+            this.label13.Text = "Combined Component Name:";
+            // 
+            // chkCombineComps
+            // 
+            this.chkCombineComps.AutoSize = true;
+            this.chkCombineComps.Location = new System.Drawing.Point(28, 125);
+            this.chkCombineComps.Name = "chkCombineComps";
+            this.chkCombineComps.Size = new System.Drawing.Size(129, 17);
+            this.chkCombineComps.TabIndex = 27;
+            this.chkCombineComps.Text = "Combine Components";
+            this.chkCombineComps.UseVisualStyleBackColor = true;
+            this.chkCombineComps.CheckedChanged += new System.EventHandler(this.chkCombineComps_CheckedChanged);
             // 
             // label3
             // 
@@ -326,6 +409,31 @@
             this.lbComponents.Size = new System.Drawing.Size(141, 121);
             this.lbComponents.TabIndex = 18;
             this.lbComponents.SelectedIndexChanged += new System.EventHandler(this.lbComponents_SelectedIndexChanged_1);
+            // 
+            // btnNSGAII
+            // 
+            this.btnNSGAII.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNSGAII.Location = new System.Drawing.Point(675, 146);
+            this.btnNSGAII.Name = "btnNSGAII";
+            this.btnNSGAII.Size = new System.Drawing.Size(202, 33);
+            this.btnNSGAII.TabIndex = 20;
+            this.btnNSGAII.Text = "Run NSGA-II";
+            this.toolTip1.SetToolTip(this.btnNSGAII, "Run genetic algorithm simulation. Results can be viewed from the Model Manager Fo" +
+                    "rm.");
+            this.btnNSGAII.UseVisualStyleBackColor = true;
+            this.btnNSGAII.Click += new System.EventHandler(this.btnNSGAII_Click);
+            // 
+            // btnOrderComponents
+            // 
+            this.btnOrderComponents.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnOrderComponents.Location = new System.Drawing.Point(675, 107);
+            this.btnOrderComponents.Name = "btnOrderComponents";
+            this.btnOrderComponents.Size = new System.Drawing.Size(202, 33);
+            this.btnOrderComponents.TabIndex = 19;
+            this.btnOrderComponents.Text = "Write Out Order";
+            this.toolTip1.SetToolTip(this.btnOrderComponents, "Create a precedence order file.");
+            this.btnOrderComponents.UseVisualStyleBackColor = true;
+            this.btnOrderComponents.Click += new System.EventHandler(this.btnOrderComponents_Click);
             // 
             // lbCurrentOptions
             // 
@@ -447,111 +555,17 @@
             this.btnCreateNewOption.UseVisualStyleBackColor = true;
             this.btnCreateNewOption.Click += new System.EventHandler(this.btnCreateNewOption_Click);
             // 
-            // txtCombinedCompName
+            // btnLoadZones
             // 
-            this.txtCombinedCompName.Location = new System.Drawing.Point(189, 25);
-            this.txtCombinedCompName.Name = "txtCombinedCompName";
-            this.txtCombinedCompName.Size = new System.Drawing.Size(158, 20);
-            this.txtCombinedCompName.TabIndex = 21;
-            // 
-            // txtCombinedArea
-            // 
-            this.txtCombinedArea.Location = new System.Drawing.Point(189, 77);
-            this.txtCombinedArea.Name = "txtCombinedArea";
-            this.txtCombinedArea.ReadOnly = true;
-            this.txtCombinedArea.Size = new System.Drawing.Size(158, 20);
-            this.txtCombinedArea.TabIndex = 22;
-            // 
-            // txtCombinedVolume
-            // 
-            this.txtCombinedVolume.Location = new System.Drawing.Point(189, 103);
-            this.txtCombinedVolume.Name = "txtCombinedVolume";
-            this.txtCombinedVolume.ReadOnly = true;
-            this.txtCombinedVolume.Size = new System.Drawing.Size(158, 20);
-            this.txtCombinedVolume.TabIndex = 23;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(6, 28);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(145, 13);
-            this.label13.TabIndex = 24;
-            this.label13.Text = "Combined Component Name:";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(6, 80);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(82, 13);
-            this.label14.TabIndex = 25;
-            this.label14.Text = "Combined Area:";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(6, 106);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(95, 13);
-            this.label15.TabIndex = 26;
-            this.label15.Text = "Combined Volume:";
-            // 
-            // chkCombineComps
-            // 
-            this.chkCombineComps.AutoSize = true;
-            this.chkCombineComps.Location = new System.Drawing.Point(28, 125);
-            this.chkCombineComps.Name = "chkCombineComps";
-            this.chkCombineComps.Size = new System.Drawing.Size(129, 17);
-            this.chkCombineComps.TabIndex = 27;
-            this.chkCombineComps.Text = "Combine Components";
-            this.chkCombineComps.UseVisualStyleBackColor = true;
-            this.chkCombineComps.CheckedChanged += new System.EventHandler(this.chkCombineComps_CheckedChanged);
-            // 
-            // grpCombined
-            // 
-            this.grpCombined.Controls.Add(this.txtCombinedCategory);
-            this.grpCombined.Controls.Add(this.label16);
-            this.grpCombined.Controls.Add(this.txtCombinedCompName);
-            this.grpCombined.Controls.Add(this.txtCombinedArea);
-            this.grpCombined.Controls.Add(this.label15);
-            this.grpCombined.Controls.Add(this.txtCombinedVolume);
-            this.grpCombined.Controls.Add(this.label14);
-            this.grpCombined.Controls.Add(this.label13);
-            this.grpCombined.Enabled = false;
-            this.grpCombined.Location = new System.Drawing.Point(11, 158);
-            this.grpCombined.Name = "grpCombined";
-            this.grpCombined.Size = new System.Drawing.Size(353, 154);
-            this.grpCombined.TabIndex = 28;
-            this.grpCombined.TabStop = false;
-            this.grpCombined.Text = "Combined Component Info";
-            // 
-            // txtCombinedCategory
-            // 
-            this.txtCombinedCategory.Location = new System.Drawing.Point(189, 51);
-            this.txtCombinedCategory.Name = "txtCombinedCategory";
-            this.txtCombinedCategory.Size = new System.Drawing.Size(158, 20);
-            this.txtCombinedCategory.TabIndex = 27;
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(6, 54);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(159, 13);
-            this.label16.TabIndex = 28;
-            this.label16.Text = "Combined Component Category:";
-            // 
-            // btnCombineComp
-            // 
-            this.btnCombineComp.Enabled = false;
-            this.btnCombineComp.Location = new System.Drawing.Point(200, 125);
-            this.btnCombineComp.Name = "btnCombineComp";
-            this.btnCombineComp.Size = new System.Drawing.Size(158, 23);
-            this.btnCombineComp.TabIndex = 29;
-            this.btnCombineComp.Text = "Combine Component";
-            this.btnCombineComp.UseVisualStyleBackColor = true;
-            this.btnCombineComp.Click += new System.EventHandler(this.btnCombineComp_Click);
+            this.btnLoadZones.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLoadZones.Location = new System.Drawing.Point(675, 24);
+            this.btnLoadZones.Name = "btnLoadZones";
+            this.btnLoadZones.Size = new System.Drawing.Size(202, 33);
+            this.btnLoadZones.TabIndex = 30;
+            this.btnLoadZones.Text = "Load Zones";
+            this.toolTip1.SetToolTip(this.btnLoadZones, "Write out list of componenets to be simulated to a file.");
+            this.btnLoadZones.UseVisualStyleBackColor = true;
+            this.btnLoadZones.Click += new System.EventHandler(this.btnLoadZones_Click);
             // 
             // ComponentBuilderForm
             // 
@@ -636,5 +650,6 @@
         private System.Windows.Forms.TextBox txtCombinedCategory;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Button btnCombineComp;
+        private System.Windows.Forms.Button btnLoadZones;
     }
 }

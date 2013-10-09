@@ -96,8 +96,7 @@ namespace RevitLibrary.New_Forms
             chklbSummaryDetails.CheckOnClick = false;
             chklbSummaryDetails.MouseClick += new MouseEventHandler(chklbSummaryDetails_DoubleClick);
             grdVwMatSum.CellEndEdit += new DataGridViewCellEventHandler(grdVwMatSum_CellEndEdit);
-            //chklbSummaryDetails.DoubleClick += new EventHandler(chklbSummaryDetails_DoubleClick);
-
+            
             for (int i = 0; i < phases.Length; i++)
             {
                 DataGridViewRow row = new DataGridViewRow();

@@ -99,6 +99,12 @@
     <Compile Include="Forms\PhysicalScheduleForm.Designer.cs">
       <DependentUpon>PhysicalScheduleForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="New Forms\LoadZonesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="New Forms\LoadZonesForm.Designer.cs">
+      <DependentUpon>LoadZonesForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="New Forms\MaterialForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -193,6 +199,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PhysicalScheduleForm.resx">
       <DependentUpon>PhysicalScheduleForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="New Forms\LoadZonesForm.resx">
+      <DependentUpon>LoadZonesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="New Forms\MaterialForm.resx">
       <DependentUpon>MaterialForm.cs</DependentUpon>

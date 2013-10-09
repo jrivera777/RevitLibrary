@@ -117,8 +117,8 @@ namespace RevitLibrary.New_Forms
                     chtData.ChartAreas[0].AxisY.Minimum = calculateMinCost();
                     chtData.ChartAreas[0].AxisX.Title = "Time (days)";
                     chtData.ChartAreas[0].AxisY.Title = "Cost ($)";
-                    chtData.ChartAreas[0].AxisX.Interval = 10;
-                    chtData.ChartAreas[0].AxisY.Interval = 10000;
+                    //chtData.ChartAreas[0].AxisX.Interval = 10;
+                    //chtData.ChartAreas[0].AxisY.Interval = 10000;
                     Projects.Sort(new CostComparer());
                     foreach (ProjectResult proj in Projects)
                     {
@@ -141,8 +141,8 @@ namespace RevitLibrary.New_Forms
                     chtData.ChartAreas[0].AxisY.Minimum = calculateMinEI();
                     chtData.ChartAreas[0].AxisX.Title = "Time (days)";
                     chtData.ChartAreas[0].AxisY.Title = "EI (CO2)";
-                    chtData.ChartAreas[0].AxisX.Interval = 10;
-                    chtData.ChartAreas[0].AxisY.Interval = 10000;
+                    //chtData.ChartAreas[0].AxisX.Interval = 10;
+                    //chtData.ChartAreas[0].AxisY.Interval = 10000;
 
                     Projects.Sort(new EIComparer());
                     foreach (ProjectResult proj in Projects)
@@ -166,8 +166,8 @@ namespace RevitLibrary.New_Forms
                     chtData.ChartAreas[0].AxisY.Minimum = calculateMinEI();
                     chtData.ChartAreas[0].AxisX.Title = "Cost ($)";
                     chtData.ChartAreas[0].AxisY.Title = "EI (CO2)";
-                    chtData.ChartAreas[0].AxisX.Interval = 10000;
-                    chtData.ChartAreas[0].AxisY.Interval = 10000;
+                    //chtData.ChartAreas[0].AxisX.Interval = 10000;
+                    //chtData.ChartAreas[0].AxisY.Interval = 10000;
                     Projects.Sort(new CostComparer());
                     foreach (ProjectResult proj in Projects)
                     {
@@ -256,16 +256,32 @@ namespace RevitLibrary.New_Forms
         }
         public int FindBound(int val, Boolean upper)
         {
-            int temp = val;
-            while (temp % 10 != 0)
-            {
-                if (upper)
-                    temp++;
-                else
-                    temp--;
-            }
+            int res = -1;
+            int d = 1;
+            int f = val;
+            int p = (int)Math.Ceiling(Math.Log10(val));
+            
+            for (int i = 0; i < p - 1; i++)
+                d *= 10;
+            for(int i = 0; i < p -1; i++)
+                f /= 10;
 
-            return temp;
+            res = f * d;
+            if (upper)
+                res += d;
+
+
+            //int temp = val;
+            //while (temp % 10 != 0)
+            //{
+            //    if (upper)
+            //        temp++;
+            //    else
+            //        temp--;
+            //}
+
+            //return temp;
+            return res;
         }
     }
 }
