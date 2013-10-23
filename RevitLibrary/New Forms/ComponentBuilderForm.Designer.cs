@@ -76,7 +76,6 @@
             this.lbCurrentCrew = new System.Windows.Forms.ListBox();
             this.btnCreateNewOption = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.btnLoadZones = new System.Windows.Forms.Button();
             this.grpComponents.SuspendLayout();
             this.grpCombined.SuspendLayout();
             this.SuspendLayout();
@@ -174,7 +173,7 @@
             // btnWrite
             // 
             this.btnWrite.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnWrite.Location = new System.Drawing.Point(675, 68);
+            this.btnWrite.Location = new System.Drawing.Point(675, 22);
             this.btnWrite.Name = "btnWrite";
             this.btnWrite.Size = new System.Drawing.Size(202, 33);
             this.btnWrite.TabIndex = 6;
@@ -256,7 +255,6 @@
             // 
             // grpComponents
             // 
-            this.grpComponents.Controls.Add(this.btnLoadZones);
             this.grpComponents.Controls.Add(this.btnCombineComp);
             this.grpComponents.Controls.Add(this.grpCombined);
             this.grpComponents.Controls.Add(this.chkCombineComps);
@@ -413,7 +411,7 @@
             // btnNSGAII
             // 
             this.btnNSGAII.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNSGAII.Location = new System.Drawing.Point(675, 146);
+            this.btnNSGAII.Location = new System.Drawing.Point(675, 100);
             this.btnNSGAII.Name = "btnNSGAII";
             this.btnNSGAII.Size = new System.Drawing.Size(202, 33);
             this.btnNSGAII.TabIndex = 20;
@@ -426,7 +424,7 @@
             // btnOrderComponents
             // 
             this.btnOrderComponents.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOrderComponents.Location = new System.Drawing.Point(675, 107);
+            this.btnOrderComponents.Location = new System.Drawing.Point(675, 61);
             this.btnOrderComponents.Name = "btnOrderComponents";
             this.btnOrderComponents.Size = new System.Drawing.Size(202, 33);
             this.btnOrderComponents.TabIndex = 19;
@@ -555,18 +553,6 @@
             this.btnCreateNewOption.UseVisualStyleBackColor = true;
             this.btnCreateNewOption.Click += new System.EventHandler(this.btnCreateNewOption_Click);
             // 
-            // btnLoadZones
-            // 
-            this.btnLoadZones.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLoadZones.Location = new System.Drawing.Point(675, 24);
-            this.btnLoadZones.Name = "btnLoadZones";
-            this.btnLoadZones.Size = new System.Drawing.Size(202, 33);
-            this.btnLoadZones.TabIndex = 30;
-            this.btnLoadZones.Text = "Load Zones";
-            this.toolTip1.SetToolTip(this.btnLoadZones, "Write out list of componenets to be simulated to a file.");
-            this.btnLoadZones.UseVisualStyleBackColor = true;
-            this.btnLoadZones.Click += new System.EventHandler(this.btnLoadZones_Click);
-            // 
             // ComponentBuilderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -650,6 +636,5 @@
         private System.Windows.Forms.TextBox txtCombinedCategory;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Button btnCombineComp;
-        private System.Windows.Forms.Button btnLoadZones;
     }
 }

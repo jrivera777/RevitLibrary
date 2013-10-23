@@ -599,14 +599,5 @@ namespace RevitLibrary.New_Forms
             }
             ClearControls();
         }
-
-        private void btnLoadZones_Click(object sender, EventArgs e)
-        {
-            using (LoadZonesForm zFrm = new LoadZonesForm())
-            {
-                zFrm.modelElements = foundInModel;
-                zFrm.ShowDialog();
-            }
-        }
     }
 }
