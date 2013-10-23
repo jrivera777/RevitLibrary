@@ -34,46 +34,6 @@ namespace RevitLibrary
             lblFileName.Text = RevitDocument.Title;
             manager = new ElementManager(RevitDocument);
         }
-        private void btnWalls_Click(object sender, EventArgs e)
-        {
-            //initiateAssemblyForm("Wall");
-            //initiateAssemblyForm("All");
-
-            UIDocument uidoc = new UIDocument(RevitDocument);
-            Autodesk.Revit.UI.Selection.SelElementSet collection = uidoc.Selection.Elements;
-
-            // Display current number of selected elements
-            TaskDialog.Show("Revit", "Number of selected elements: " + collection.Size.ToString());
-
-            //Create a new SelElementSet
-            SelElementSet newSelectedElementSet = SelElementSet.Create();
-
-
-            Wall wall = null;
-            // Add wall into the created element set.
-            foreach (Autodesk.Revit.DB.Element elem in collection)
-            {
-                if (elem is Wall)
-                {
-                    StringBuilder sb = new StringBuilder();
-
-                    wall = (Wall)elem;
-                    foreach (Parameter param in wall.Parameters)
-                        sb.Append(param.Definition.Name + "=> StorageType-" + param.StorageType.ToString() + ": " + param.AsValueString() + System.Environment.NewLine);
-
-                    MessageBox.Show(sb.ToString(), "Wall Instance Parameters");
-
-                    WallType wType = wall.WallType;
-                    sb.Clear();
-                    sb.Append("WallType= " + wType.Name + System.Environment.NewLine);
-                    foreach (Parameter param in wType.Parameters)
-                        sb.Append(param.Definition.Name + "=> StorageType-" + param.StorageType.ToString() + ": " + param.AsValueString() + System.Environment.NewLine);
-
-                    MessageBox.Show(sb.ToString(), "WallType Parameters");
-
-                }
-            }
-        }
         /// <summary>
         /// Create ComponentBuilderForm. Pass in the Revit Document object for use.
         /// </summary>
@@ -155,61 +115,6 @@ namespace RevitLibrary
                 resFrm.FileName = fName;
                 resFrm.Results = results;
                 resFrm.ShowDialog();
-            }
-        }
-        private void btnFamily_Click(object sender, EventArgs e)
-        {
-            //define categories to search
-            //List<BuiltInCategory> cats = new List<BuiltInCategory>();
-            //cats.Add(BuiltInCategory.OST_Walls);
-            //cats.Add(BuiltInCategory.OST_Roofs);
-            //cats.Add(BuiltInCategory.OST_StructuralFoundation);
-
-            //CreateFamilyTree(RevitDocument);
-            
-        }
-        public void CreateFamilyTree(Document myDoc)
-        {
-            IEnumerable<Element> familiesCollector = new FilteredElementCollector(myDoc)
-                .OfClass(typeof(FamilyInstance))
-                .WhereElementIsNotElementType()
-                .Cast<FamilyInstance>()
-                // (family, familyInstances):
-                .GroupBy(fi => fi.Symbol.Family)
-                .Select(f => f.Key);
-
-            var mapCatToFam = new Dictionary<string, List<Element>>();
-
-            var categoryList = new Dictionary<string, Category>();
-
-            foreach (var f in familiesCollector)
-            {
-                Family fam = (Family)f;
-                var catName = "";
-                if (fam.FamilyCategory != null)
-                    catName = fam.FamilyCategory.Name;
-                if (!String.IsNullOrEmpty(catName))
-                {
-                    if (mapCatToFam.ContainsKey(catName))
-                        mapCatToFam[catName].Add(f);
-                    else
-                    {
-                        mapCatToFam.Add(catName,
-                          new List<Element> { f });
-                        categoryList.Add(catName,
-                          f.Category);
-
-                        StringBuilder sb = new StringBuilder();
-                        foreach (FamilySymbol sym in fam.Symbols)
-                            sb.Append(sym.Name + System.Environment.NewLine);
-                        MessageBox.Show(sb.ToString());
-                    }
-                }
-            }
-
-            foreach (KeyValuePair<String, Category> item in categoryList)
-            {
-                MessageBox.Show(item.Key);
             }
         }
     }
