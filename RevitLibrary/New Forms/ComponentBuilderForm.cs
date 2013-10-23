@@ -230,7 +230,7 @@ namespace RevitLibrary.New_Forms
         private void ComponentBuilderForm_Load(object sender, EventArgs e)
         {
             manager = new ElementManager(this.RevitDocument);
-            
+
             foundInModel = manager.RetrieveWallInfo();
             foundInModel.AddRange(manager.RetrieveRoofingInfo());
             foundInModel.AddRange(manager.RetrieveFloorInfo());
@@ -471,7 +471,8 @@ namespace RevitLibrary.New_Forms
             }
         }
         /// <summary>
-        /// Asks for Component and Precendence Order XMLf files, and runs the NSGAII process, generating results in another XML file.
+        /// Asks for Component and Precendence Order XML files, and runs the NSGAII process, generating results in another XML file.
+        /// Optionally, energy simulation data can be given for use in objective functions
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -486,33 +487,61 @@ namespace RevitLibrary.New_Forms
                 openDlg.ShowDialog();
 
                 if (!String.IsNullOrEmpty(openDlg.FileName))
-                {
                     compFile = openDlg.FileName;
-                }
-            }
 
-            using (OpenFileDialog openDlg = new OpenFileDialog())
-            {
+
                 openDlg.Title = "Select Precedence File";
                 openDlg.Filter = "XML File|*.xml";
                 openDlg.ShowDialog();
 
                 if (!String.IsNullOrEmpty(openDlg.FileName))
-                {
                     orderFile = openDlg.FileName;
-                }
             }
 
             if (String.IsNullOrEmpty(compFile) || String.IsNullOrEmpty(orderFile))
                 MessageBox.Show("Failed to load necessary files for NSGA-II", "Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
+                //ask about optional parametric options file
+                DialogResult paraRes = MessageBox.Show("Do you want to use Energy simulation results?",
+                                                       "Energy Simulation?",
+                                                       MessageBoxButtons.YesNo,
+                                                       MessageBoxIcon.Question);
+
+                String baseIDF = "";
+                String parametrics = "";
+                String baseDir = "";
+                String pppDir = "";
+                if (paraRes == DialogResult.Yes)
+                {
+                    using (OpenFileDialog openDlg = new OpenFileDialog())
+                    {
+                        openDlg.Title = "Select Parametric Options File";
+                        openDlg.Filter = "XML File|*.xml";
+                        openDlg.ShowDialog();
+
+                        if (!String.IsNullOrEmpty(openDlg.FileName))
+                            parametrics = openDlg.FileName;
+                    }
+                    using (FolderBrowserDialog fdDlg = new FolderBrowserDialog())
+                    {
+                        fdDlg.Description = "Select Folder containing Energy Simulation results";
+                        fdDlg.ShowDialog();
+                        if (!String.IsNullOrEmpty(fdDlg.SelectedPath))
+                            baseDir = fdDlg.SelectedPath;
+                    }
+                }
+
                 try
                 {
                     Process p = new Process();
                     p.StartInfo.WorkingDirectory = NSGAII_DIR;
                     p.StartInfo.FileName = @"NSGAII.exe";
-                    p.StartInfo.Arguments = "\"" + compFile + "\"  \"" + orderFile + "\"";
+                    p.StartInfo.Arguments = "\"" + compFile + "\"  \"" + orderFile + "\" 200 500";
+
+                    if (!String.IsNullOrEmpty(parametrics) && !String.IsNullOrEmpty(baseDir))
+                        p.StartInfo.Arguments += " \"" + parametrics + "\" " + baseDir + "\"";
+
                     p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
                     p.Start();
                     p.WaitForExit();

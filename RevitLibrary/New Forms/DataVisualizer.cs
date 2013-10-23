@@ -17,7 +17,7 @@ namespace RevitLibrary.New_Forms
         {
             TIMEVCOST,
             TIMEVEI,
-            COSTVEI            
+            COSTVEI
         }
         private const int TIME_BUFFER_ZONE = 100;
         private const int COST_BUFFER_ZONE = 10000;
@@ -106,78 +106,68 @@ namespace RevitLibrary.New_Forms
             switch (this.CompareType)
             {
                 case Comparison.TIMEVCOST:
-                {
-                    chtData.Titles.Add("TVC");
-                    chtData.Titles[0].Text = "Time vs Cost";
-                    chtData.Titles[0].Font = new Font("Arial", 16);
-                    chtData.Series["Projects"].MarkerColor = Color.Blue;
-                    chtData.ChartAreas[0].AxisX.Maximum = calculateMaxDuration();
-                    chtData.ChartAreas[0].AxisX.Minimum = calculateMinDuration();
-                    chtData.ChartAreas[0].AxisY.Maximum = calculateMaxCost();
-                    chtData.ChartAreas[0].AxisY.Minimum = calculateMinCost();
-                    chtData.ChartAreas[0].AxisX.Title = "Time (days)";
-                    chtData.ChartAreas[0].AxisY.Title = "Cost ($)";
-                    //chtData.ChartAreas[0].AxisX.Interval = 10;
-                    //chtData.ChartAreas[0].AxisY.Interval = 10000;
-                    Projects.Sort(new CostComparer());
-                    foreach (ProjectResult proj in Projects)
                     {
-                        //chtData.Series["Projects"].Points.AddXY(proj.TotalDuration, proj.TotalCost);
-                        DataPoint pt = new DataPoint(proj.TotalDuration, proj.TotalCost);
-                        pt.ToolTip = String.Format("Time = {0}, Cost = {1}", proj.TotalDuration, proj.TotalCost);
-                        chtData.Series["Projects"].Points.Add(pt);
+                        chtData.Titles.Add("TVC");
+                        chtData.Titles[0].Text = "Time vs Cost";
+                        chtData.Titles[0].Font = new Font("Arial", 16);
+                        chtData.Series["Projects"].MarkerColor = Color.Blue;
+                        chtData.ChartAreas[0].AxisX.Maximum = calculateMaxDuration();
+                        chtData.ChartAreas[0].AxisX.Minimum = calculateMinDuration();
+                        chtData.ChartAreas[0].AxisY.Maximum = calculateMaxCost();
+                        chtData.ChartAreas[0].AxisY.Minimum = calculateMinCost();
+                        chtData.ChartAreas[0].AxisX.Title = "Time (days)";
+                        chtData.ChartAreas[0].AxisY.Title = "Cost ($)";
+                        Projects.Sort(new CostComparer());
+                        foreach (ProjectResult proj in Projects)
+                        {
+                            DataPoint pt = new DataPoint(proj.TotalDuration, proj.TotalCost);
+                            pt.ToolTip = String.Format("Time = {0}, Cost = {1}", proj.TotalDuration, proj.TotalCost);
+                            chtData.Series["Projects"].Points.Add(pt);
+                        }
+                        break;
                     }
-                    break;
-                }
                 case Comparison.TIMEVEI:
-                {
-                    chtData.Titles.Add("TVE");
-                    chtData.Titles[0].Text = "Time vs EI";
-                    chtData.Titles[0].Font = new Font("Arial", 16);
-                    chtData.Series["Projects"].MarkerColor = Color.Red;
-                    chtData.ChartAreas[0].AxisX.Maximum = calculateMaxDuration();
-                    chtData.ChartAreas[0].AxisX.Minimum = calculateMinDuration();
-                    chtData.ChartAreas[0].AxisY.Maximum = RoundToNearest(calculateMaxEI() + 20000, 10000);
-                    chtData.ChartAreas[0].AxisY.Minimum = calculateMinEI();
-                    chtData.ChartAreas[0].AxisX.Title = "Time (days)";
-                    chtData.ChartAreas[0].AxisY.Title = "EI (CO2)";
-                    //chtData.ChartAreas[0].AxisX.Interval = 10;
-                    //chtData.ChartAreas[0].AxisY.Interval = 10000;
-
-                    Projects.Sort(new EIComparer());
-                    foreach (ProjectResult proj in Projects)
                     {
-                        //chtData.Series["Projects"].Points.AddXY(proj.TotalDuration, proj.TotalEI);
-                        DataPoint pt = new DataPoint(proj.TotalDuration, proj.TotalEI);
-                        pt.ToolTip = String.Format("Time = {0}, EI = {1}", proj.TotalDuration, proj.TotalEI);
-                        chtData.Series["Projects"].Points.Add(pt);
+                        chtData.Titles.Add("TVE");
+                        chtData.Titles[0].Text = "Time vs EI";
+                        chtData.Titles[0].Font = new Font("Arial", 16);
+                        chtData.Series["Projects"].MarkerColor = Color.Red;
+                        chtData.ChartAreas[0].AxisX.Maximum = calculateMaxDuration();
+                        chtData.ChartAreas[0].AxisX.Minimum = calculateMinDuration();
+                        chtData.ChartAreas[0].AxisY.Maximum = calculateMaxEI();
+                        chtData.ChartAreas[0].AxisY.Minimum = calculateMinEI();
+                        chtData.ChartAreas[0].AxisX.Title = "Time (days)";
+                        chtData.ChartAreas[0].AxisY.Title = "EI (CO2)";
+                        Projects.Sort(new EIComparer());
+                        foreach (ProjectResult proj in Projects)
+                        {
+                            DataPoint pt = new DataPoint(proj.TotalDuration, proj.TotalEI);
+                            pt.ToolTip = String.Format("Time = {0}, EI = {1}", proj.TotalDuration, proj.TotalEI);
+                            chtData.Series["Projects"].Points.Add(pt);
+                        }
+                        break;
                     }
-                    break;
-                }
                 case Comparison.COSTVEI:
-                {
-                    chtData.Titles.Add("CVE");
-                    chtData.Titles[0].Text = "Cost vs EI";
-                    chtData.Titles[0].Font = new Font("Arial", 16);
-                    chtData.Series["Projects"].MarkerColor = Color.Green;
-                    chtData.ChartAreas[0].AxisX.Maximum = calculateMaxCost();
-                    chtData.ChartAreas[0].AxisX.Minimum = calculateMinCost();
-                    chtData.ChartAreas[0].AxisY.Maximum = RoundToNearest(calculateMaxEI() + 20000, 10000);
-                    chtData.ChartAreas[0].AxisY.Minimum = calculateMinEI();
-                    chtData.ChartAreas[0].AxisX.Title = "Cost ($)";
-                    chtData.ChartAreas[0].AxisY.Title = "EI (CO2)";
-                    //chtData.ChartAreas[0].AxisX.Interval = 10000;
-                    //chtData.ChartAreas[0].AxisY.Interval = 10000;
-                    Projects.Sort(new CostComparer());
-                    foreach (ProjectResult proj in Projects)
                     {
-                        //chtData.Series["Projects"].Points.AddXY(proj.TotalCost, proj.TotalEI);
-                        DataPoint pt = new DataPoint(proj.TotalCost, proj.TotalEI);
-                        pt.ToolTip = String.Format("Cost = {0}, EI = {1}", proj.TotalCost, proj.TotalEI);
-                        chtData.Series["Projects"].Points.Add(pt);
+                        chtData.Titles.Add("CVE");
+                        chtData.Titles[0].Text = "Cost vs EI";
+                        chtData.Titles[0].Font = new Font("Arial", 16);
+                        chtData.Series["Projects"].MarkerColor = Color.Green;
+                        chtData.ChartAreas[0].AxisX.Maximum = calculateMaxCost();
+                        chtData.ChartAreas[0].AxisX.Minimum = calculateMinCost();
+                        chtData.ChartAreas[0].AxisY.Maximum = calculateMaxEI();
+                        chtData.ChartAreas[0].AxisY.Minimum = calculateMinEI();
+                        chtData.ChartAreas[0].AxisX.Title = "Cost ($)";
+                        chtData.ChartAreas[0].AxisY.Title = "EI (CO2)";
+                        Projects.Sort(new CostComparer());
+                        foreach (ProjectResult proj in Projects)
+                        {
+                            DataPoint pt = new DataPoint(proj.TotalCost, proj.TotalEI);
+                            pt.ToolTip = String.Format("Cost = {0}, EI = {1}", proj.TotalCost, proj.TotalEI);
+                            chtData.Series["Projects"].Points.Add(pt);
+                        }
+                        break;
                     }
-                    break;
-                }
                 default:
                     break;
             }
@@ -260,27 +250,15 @@ namespace RevitLibrary.New_Forms
             int d = 1;
             int f = val;
             int p = (int)Math.Ceiling(Math.Log10(val));
-            
+
             for (int i = 0; i < p - 1; i++)
                 d *= 10;
-            for(int i = 0; i < p -1; i++)
+            for (int i = 0; i < p - 1; i++)
                 f /= 10;
 
             res = f * d;
             if (upper)
                 res += d;
-
-
-            //int temp = val;
-            //while (temp % 10 != 0)
-            //{
-            //    if (upper)
-            //        temp++;
-            //    else
-            //        temp--;
-            //}
-
-            //return temp;
             return res;
         }
     }

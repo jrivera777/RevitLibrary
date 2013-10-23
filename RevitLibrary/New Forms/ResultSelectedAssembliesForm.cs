@@ -28,7 +28,7 @@ namespace RevitLibrary.New_Forms
                 StringBuilder sb = new StringBuilder();
                 sb.Append(assem.Category + ":" + System.Environment.NewLine);
                 sb.Append("\t" + assem.AssemblyName + System.Environment.NewLine);
-                sb.Append("\tCost:" + assem.Cost + System.Environment.NewLine);
+                sb.Append(String.Format("\tCost: {0:C}", assem.Cost) + System.Environment.NewLine);
                 sb.Append("\tEI:" + assem.CO2 + System.Environment.NewLine);
                 sb.Append("\tTime:" + assem.Duration + System.Environment.NewLine + System.Environment.NewLine);
                 txtAssemblies.Text += sb.ToString();
