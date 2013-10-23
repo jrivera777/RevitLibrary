@@ -44,10 +44,6 @@ namespace RevitLibrary.Forms
                         DataGridViewTextBoxCell nameCell = new DataGridViewTextBoxCell();
                         nameCell.Value = bComp.Name;
                         row.Cells.Add(nameCell);
-                        //DataGridViewTextBoxCell descCell = new DataGridViewTextBoxCell();
-                        //descCell.Value = mat.Description;
-                        //row.Cells.Add(descCell);
-                        
 
                         Boolean exists = false;
                         foreach (DataGridViewRow r in dgvSchedule.Rows)
@@ -112,17 +108,15 @@ namespace RevitLibrary.Forms
                     writer.WriteStartElement("Component");
                     writer.WriteElementString("Category", row.Cells["category"].Value.ToString());
                     writer.WriteElementString("Name", row.Cells["name"].Value.ToString());
-                    //writer.WriteElementString("Description", row.Cells["desc"].Value.ToString());
 
-                    //if (row.Cells["duration"].Value == null)
-                    //    throw new NullReferenceException("No Duration Found");
-                    //writer.WriteElementString("Duration", row.Cells["duration"].Value.ToString());
                     if (row.Cells["pred"].Value == null)
                         throw new NullReferenceException("No Predecessor Found");
                     writer.WriteElementString("PredecessorName", row.Cells["pred"].Value.ToString());
+                    
                     if (row.Cells["succ"].Value == null)
                         throw new NullReferenceException("No Successor Found");
                     writer.WriteElementString("SuccessorName", row.Cells["succ"].Value.ToString());
+                    
                     writer.WriteEndElement();
                 }
                 writer.WriteEndElement();
@@ -147,7 +141,6 @@ namespace RevitLibrary.Forms
                 dgvSchedule.Rows.Insert(index, copy);
             }
         }
-
         private void btnUp_Click(object sender, EventArgs e)
         {
             if (dgvSchedule.SelectedRows.Count > 0)
@@ -162,7 +155,6 @@ namespace RevitLibrary.Forms
                 }
             }
         }
-
         private void btnDown_Click(object sender, EventArgs e)
         {
             if (dgvSchedule.SelectedRows.Count > 0)
@@ -177,7 +169,6 @@ namespace RevitLibrary.Forms
                 }
             }
         }
-
         private void btnAutofill_Click(object sender, EventArgs e)
         {
             if (dgvSchedule.RowCount > 1)
@@ -212,14 +203,19 @@ namespace RevitLibrary.Forms
                 }
             }
         }
-
         private void btnDrawGraph_Click(object sender, EventArgs e)
         {
             GViewer gView = (GViewer)graphPanel.Controls["GraphViewer"];
-            Graph g = GenerateGraph(dgvSchedule.Rows);
-            gView.Graph = g;
+            try
+            {
+                Graph g = GenerateGraph(dgvSchedule.Rows);
+                gView.Graph = g;
+            }
+            catch (NullReferenceException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
-
         /// <summary>
         /// Generate graph based on given Gridview. Should Represent a project schedule.
         /// </summary>
@@ -227,12 +223,16 @@ namespace RevitLibrary.Forms
         private Graph GenerateGraph(DataGridViewRowCollection rows)
         {
             Graph g = new Graph("Schedule");
+            List<Edge> startEdges = new List<Edge>();
             Edge currEdge;
 
             Node start = g.AddNode("START");
             start.Attr.Color = Microsoft.Glee.Drawing.Color.Green;
             Node end = g.AddNode("END");
             end.Attr.Color = Microsoft.Glee.Drawing.Color.Red;
+
+            if (rows.Count <= 0)
+                g.AddEdge(start.Id, end.Id);
 
             foreach (DataGridViewRow row in rows)
             {
@@ -255,14 +255,38 @@ namespace RevitLibrary.Forms
                     g.AddEdge(predNode.Id, currNode.Id);
                 }
                 else if (predNode.Id.Equals(start.Id))
-                    g.AddEdge(start.Id, currNode.Id);
+                {
+                    bool exists = false;
+                    foreach (Edge ed in start.OutEdges)
+                    {
+                        if (ed.Target.Equals(currNode.Id))
+                        {
+                            exists = true;
+                            break;
+                        }
+                    }
+                    if(!exists)
+                        g.AddEdge(start.Id, currNode.Id);
+                }
                 if (succNode == null)
                 {
                     succNode = g.AddNode(succ);
                     g.AddEdge(currNode.Id, succNode.Id);
                 }
                 else if (succNode.Id.Equals(end.Id))
-                    g.AddEdge(currNode.Id, end.Id);
+                {
+                    bool exists = false;
+                    foreach (Edge ed in end.InEdges)
+                    {
+                        if (ed.Source.Equals(currNode.Id))
+                        {
+                            exists = true;
+                            break;
+                        }
+                    }
+                    if (!exists)
+                        g.AddEdge(currNode.Id, end.Id);
+                }
                 else
                     g.AddEdge(currNode.Id, succNode.Id);
             }

@@ -1,0 +1,262 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BF2F8E87-BFE8-4A32-BB58-3518DC78EF8F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RevitLibrary</RootNamespace>
+    <AssemblyName>RevitLibrary</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.GLEE">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Microsoft Research\GLEE\bin\Microsoft.GLEE.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.GLEE.Drawing">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Microsoft Research\GLEE\bin\Microsoft.GLEE.Drawing.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.GLEE.GraphViewerGDI">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Microsoft Research\GLEE\bin\Microsoft.GLEE.GraphViewerGDI.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Microsoft.VisualBasic.PowerPacks.Vs, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="RevitAPI">
+      <HintPath>References\RevitAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="RevitAPIUI">
+      <HintPath>References\RevitAPIUI.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyUtil.cs" />
+    <Compile Include="DataClasses\BuildingComponent.cs" />
+    <Compile Include="DataClasses\Crew.cs" />
+    <Compile Include="DataClasses\DesignOption.cs" />
+    <Compile Include="DataClasses\MaterialLabor.cs" />
+    <Compile Include="DataClasses\MaterialSummary.cs" />
+    <Compile Include="DataClasses\OrderableComponent.cs" />
+    <Compile Include="DataClasses\ProjectResult.cs" />
+    <Compile Include="ElementManager.cs" />
+    <Compile Include="DataClasses\Assembly.cs" />
+    <Compile Include="DataClasses\AssemMaterial.cs" />
+    <Compile Include="Forms\AssemblyDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AssemblyDetailsForm.Designer.cs">
+      <DependentUpon>AssemblyDetailsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\BuildingComponentForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BuildingComponentForm.Designer.cs">
+      <DependentUpon>BuildingComponentForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ModelManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ModelManagerForm.Designer.cs">
+      <DependentUpon>ModelManagerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PhysicalScheduleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PhysicalScheduleForm.Designer.cs">
+      <DependentUpon>PhysicalScheduleForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="New Forms\MaterialForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="New Forms\MaterialForm.Designer.cs">
+      <DependentUpon>MaterialForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="New Forms\MissingCompDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="New Forms\MissingCompDialog.Designer.cs">
+      <DependentUpon>MissingCompDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="New Forms\DataVisualizer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="New Forms\DataVisualizer.Designer.cs">
+      <DependentUpon>DataVisualizer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="New Forms\NewOptionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="New Forms\NewOptionForm.Designer.cs">
+      <DependentUpon>NewOptionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="New Forms\ResultSelectedAssembliesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="New Forms\ResultSelectedAssembliesForm.Designer.cs">
+      <DependentUpon>ResultSelectedAssembliesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="New Forms\ResultsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="New Forms\ResultsForm.Designer.cs">
+      <DependentUpon>ResultsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="New Forms\ComponentBuilderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="New Forms\ComponentBuilderForm.Designer.cs">
+      <DependentUpon>ComponentBuilderForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="New Forms\CrewDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="New Forms\CrewDetailsForm.Designer.cs">
+      <DependentUpon>CrewDetailsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="ReadElements.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Forms\DataForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DataForm.Designer.cs">
+      <DependentUpon>DataForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AssemblyManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AssemblyManagerForm.Designer.cs">
+      <DependentUpon>AssemblyManagerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RevApp.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\AssemblyDetailsForm.resx">
+      <DependentUpon>AssemblyDetailsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\BuildingComponentForm.resx">
+      <DependentUpon>BuildingComponentForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DataForm.resx">
+      <DependentUpon>DataForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ModelManagerForm.resx">
+      <DependentUpon>ModelManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AssemblyManagerForm.resx">
+      <DependentUpon>AssemblyManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PhysicalScheduleForm.resx">
+      <DependentUpon>PhysicalScheduleForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="New Forms\MaterialForm.resx">
+      <DependentUpon>MaterialForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="New Forms\MissingCompDialog.resx">
+      <DependentUpon>MissingCompDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="New Forms\DataVisualizer.resx">
+      <DependentUpon>DataVisualizer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="New Forms\NewOptionForm.resx">
+      <DependentUpon>NewOptionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="New Forms\ResultSelectedAssembliesForm.resx">
+      <DependentUpon>ResultSelectedAssembliesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="New Forms\ResultsForm.resx">
+      <DependentUpon>ResultsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="New Forms\ComponentBuilderForm.resx">
+      <DependentUpon>ComponentBuilderForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="New Forms\CrewDetailsForm.resx">
+      <DependentUpon>CrewDetailsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\basicHouse.png" />
+    <Content Include="Images\house2.png" />
+    <Content Include="Images\search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="ClassDiagram1.cd" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="stdole">
+      <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

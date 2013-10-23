@@ -17,9 +17,9 @@ namespace RevitLibrary.DataClasses
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(this.ProjectName + ": ");
-            sb.Append("Total Cost - " + this.TotalCost.ToString() + ", ");
-            sb.Append("Total EI - " + this.TotalEI.ToString() + ", ");
-            sb.Append("Total Duration - " + this.TotalDuration.ToString());
+            sb.Append(String.Format("Total Cost - {0:C}, ", this.TotalCost));
+            sb.Append(String.Format("Total EI - {0}, ", this.TotalEI));
+            sb.Append(String.Format("Total Duration - {0} ", this.TotalDuration));
             return sb.ToString();
         }
         public override bool Equals(object obj)

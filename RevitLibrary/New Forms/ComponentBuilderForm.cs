@@ -20,36 +20,48 @@ namespace RevitLibrary.New_Forms
     public partial class ComponentBuilderForm : System.Windows.Forms.Form
     {
         private ElementManager manager;
-        private const String NSGAII_DIR = @"C:\Documents and Settings\fdot\My Documents\SIMULEICON\ikvm-7.1.4532.2\bin\";
+        private const String NSGAII_DIR = @"C:\Documents and Settings\fdot\My Documents\Visual Studio 2010\Projects\RevitLibrary\NSGAII";
         private Dictionary<String, double> areas = new Dictionary<string, double>();
         private Dictionary<String, double> volumes = new Dictionary<string, double>();
         private Dictionary<String, Assembly> Assemblies = new Dictionary<string, Assembly>();
         private Dictionary<String, BuildingComponent> comps = new Dictionary<String, BuildingComponent>();
+        private List<Assembly> foundInModel = new List<Assembly>();
         public Document RevitDocument { get; set; }
         public ComponentBuilderForm()
         {
             InitializeComponent();
         }
-
         private void btnAdd_Click(object sender, EventArgs e)
         {
+            Boolean missing = false;
             if (String.IsNullOrEmpty(txtCompName.Text))
             {
                 MessageBox.Show("Please enter a component name.");
                 return;
             }
-            //if(cboFoundInModel.SelectedIndex < 0)
-            //{
-            //    MessageBox.Show("Please select a component from the model to associate.");
-            //    return;
-            //}
 
             BuildingComponent comp = null;
-            if (cboFoundInModel.SelectedIndex < 0)
+            if (!chkCombineComps.Checked)
+                missing = cboFoundInModel.SelectedIndex < 0;
+            else
+            {
+                if (String.IsNullOrEmpty(txtCombinedCompName.Text))
+                {
+                    MessageBox.Show("Please enter a name for the combined components.");
+                    return;
+                }
+                if (String.IsNullOrEmpty(txtCombinedCompName.Text))
+                {
+                    MessageBox.Show("Please enter a category for the combined components.");
+                    return;
+                }
+                missing = String.IsNullOrEmpty(txtCombinedArea.Text) || String.IsNullOrEmpty(txtCombinedVolume.Text);
+            }
+
+            if (missing)
             {
                 using (MissingCompDialog inputDlg = new MissingCompDialog())
                 {
-                    
                     inputDlg.ShowDialog();
                     if (inputDlg.DialogResult == DialogResult.OK)
                     {
@@ -62,7 +74,7 @@ namespace RevitLibrary.New_Forms
                         comp.Category = inputDlg.Category;
 
                         Assembly assoc = new Assembly();
-                        assoc.AssemblyName = inputDlg.Name;
+                        assoc.AssemblyName = inputDlg.CompName;
                         assoc.Category = inputDlg.Category;
                         assoc.Area = inputDlg.Area;
                         assoc.Volume = inputDlg.Volume;
@@ -80,14 +92,27 @@ namespace RevitLibrary.New_Forms
             }
             else
             {
-                comp = new BuildingComponent();
-                Assembly assoc = (Assembly)cboFoundInModel.SelectedItem;    
-                comp.Name = txtCompName.Text;
-                comp.Description = txtCompDesc.Text.Trim();
-                comp.Category = txtCategory.Text;
-                comp.Area = assoc.Area;
-                comp.Volume = assoc.Volume;
+                if (!chkCombineComps.Checked)
+                {
+                    comp = new BuildingComponent();
+                    Assembly assoc = (Assembly)cboFoundInModel.SelectedItem;
+                    comp.Name = txtCompName.Text;
+                    comp.Description = txtCompDesc.Text.Trim();
+                    comp.Category = txtCategory.Text;
+                    comp.Area = assoc.Area;
+                    comp.Volume = assoc.Volume;
+                }
+                else
+                {
+                    comp = new BuildingComponent();
+                    comp.Name = txtCompName.Text;
+                    comp.Description = txtCompDesc.Text.Trim();
+                    comp.Category = txtCombinedCategory.Text;
+                    comp.Area = Double.Parse(txtCombinedArea.Text);
+                    comp.Volume = Double.Parse(txtCombinedVolume.Text);
+                }
             }
+
             if (comp == null)
                 return;
             if (!lbComponents.Items.Contains(comp))
@@ -97,6 +122,11 @@ namespace RevitLibrary.New_Forms
 
             ClearControls();
             clearComponentInfo();
+
+            txtCombinedCompName.Text = "";
+            txtCombinedCategory.Text = "";
+            txtCombinedArea.Text = "";
+            txtCombinedVolume.Text = "";
         }
         private void ClearControls()
         {
@@ -117,6 +147,11 @@ namespace RevitLibrary.New_Forms
             txtSelectedComp.Clear();
             ClearControls();
         }
+        /// <summary>
+        /// Attempt to write out Components XML file. There must be at least one valid Component defined.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnWrite_Click(object sender, EventArgs e)
         {
             if (lbComponents.Items.Count <= 0)
@@ -133,7 +168,7 @@ namespace RevitLibrary.New_Forms
                 if (!String.IsNullOrEmpty(saveDlg.FileName))
                 {
                     List<BuildingComponent> compsToWrite = new List<BuildingComponent>();
-                    foreach(Object obj in lbComponents.Items)
+                    foreach (Object obj in lbComponents.Items)
                         compsToWrite.Add((BuildingComponent)obj);
 
 
@@ -164,8 +199,7 @@ namespace RevitLibrary.New_Forms
                         writer.WriteStartElement("Alternative");
                         writer.WriteElementString("Name", opt.AssemblyName);
                         writer.WriteElementString("Code", opt.AssemblyCode);
-                        //writer.WriteElementString("Area", opt.Area.ToString());
-                        //writer.WriteElementString("Volume", opt.Volume.ToString());
+
                         double cost = opt.CalculateCostPerUnit();
                         double co2 = opt.CalculateCO2PerUnit();
                         double duration = opt.CalculateRoughDuration(bComp.Area, bComp.Volume);
@@ -185,8 +219,6 @@ namespace RevitLibrary.New_Forms
                         writer.WriteElementString("TotalAssemblyCost", (cost * areaOrVolume).ToString());
                         writer.WriteElementString("TotalAssemblyCO2", (co2 * areaOrVolume).ToString());
                         writer.WriteElementString("EstimatedDuration", duration.ToString());
-                        //writer.WriteElementString("CostPerUnit", cost.ToString());
-                        //writer.WriteElementString("CO2PerUnit", co2.ToString());
                         writer.WriteEndElement();
                     }
                     writer.WriteEndElement();
@@ -198,8 +230,6 @@ namespace RevitLibrary.New_Forms
         private void ComponentBuilderForm_Load(object sender, EventArgs e)
         {
             manager = new ElementManager(this.RevitDocument);
-
-            List<Assembly> foundInModel = new List<Assembly>();
 
             foundInModel = manager.RetrieveWallInfo();
             foundInModel.AddRange(manager.RetrieveRoofingInfo());
@@ -213,8 +243,6 @@ namespace RevitLibrary.New_Forms
                 if (!cboFoundInModel.Items.Contains(assem))
                     cboFoundInModel.Items.Add(assem);
             }
-            //Components found in model.
-            //cboFoundInModel.Items.AddRange(foundInModel.ToArray());
         }
         private void clearComponentInfo()
         {
@@ -249,9 +277,9 @@ namespace RevitLibrary.New_Forms
                 lbAssemblies.Items.Clear();
                 lbCrewOptions.Items.Clear();
                 lbCurrentCrew.Items.Clear();
-                txtArea.Clear();
-                txtVolume.Clear();
                 cboFoundInModel.SelectedIndex = -1;
+                txtArea.Text = bComp.Area.ToString();
+                txtVolume.Text = bComp.Volume.ToString();
                 lbCurrentOptions.Items.AddRange(bComp.Assemblies.ToArray());
                 lbAssemblies.Items.AddRange(manager.getAssembliesByCategory(bComp.Category, 30).ToArray());
             }
@@ -286,7 +314,7 @@ namespace RevitLibrary.New_Forms
         }
         private void lbAssemblies_MouseDoubleClick(object sender, MouseEventArgs args)
         {
-            if(lbAssemblies.SelectedIndex >= 0)
+            if (lbAssemblies.SelectedIndex >= 0)
             {
                 Assembly assem = (Assembly)lbAssemblies.SelectedItem;
                 AssemblyDetailsForm detFrm = new AssemblyDetailsForm();
@@ -318,8 +346,8 @@ namespace RevitLibrary.New_Forms
         {
             if (lbCurrentCrew.SelectedIndex >= 0)
             {
-               lbCurrentCrew.Items.RemoveAt(lbCurrentCrew.SelectedIndex);
-               ((Assembly)lbCurrentOptions.SelectedItem).CurrentCrew = null;
+                lbCurrentCrew.Items.RemoveAt(lbCurrentCrew.SelectedIndex);
+                ((Assembly)lbCurrentOptions.SelectedItem).CurrentCrew = null;
             }
         }
         public void lbCrewOptions_MouseDoubleClick(object sender, MouseEventArgs args)
@@ -332,6 +360,11 @@ namespace RevitLibrary.New_Forms
                 crewFrm.Show(this);
             }
         }
+        /// <summary>
+        /// For each distinct assembly type, the total area and volume are calculated.
+        /// Duplicates are dropped.The areas and volumes are stored for later use.
+        /// </summary>
+        /// <param name="assemblies">List of assemblies, possibly containing duplicates. </param>
         private void calculateAreas_Volumes(List<Assembly> assemblies)
         {
             areas.Clear();
@@ -346,6 +379,7 @@ namespace RevitLibrary.New_Forms
                 {
                     double area = areas[assem.AssemblyCode];
                     areas[code] = area + assem.Area;
+                    Assemblies[code].Area = areas[code];
                 }
                 else
                 {
@@ -362,6 +396,7 @@ namespace RevitLibrary.New_Forms
                 {
                     double volume = volumes[assem.AssemblyCode];
                     volumes[code] = volume + assem.Volume;
+                    Assemblies[code].Volume = volumes[code];
                 }
                 else
                     volumes.Add(code, assem.Volume);
@@ -369,25 +404,30 @@ namespace RevitLibrary.New_Forms
         }
         private void lbCurrentOptions_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (lbCurrentOptions.SelectedIndex >= 0)
-            {
-                lbCurrentCrew.Items.Clear();
-                lbCrewOptions.Items.Clear();
-                Assembly assem = (Assembly)lbCurrentOptions.SelectedItem;
-                lbCrewOptions.Items.AddRange(manager.getCrewsByCategory(assem.Category, -1).ToArray());
-                if (assem.CurrentCrew != null)
-                    lbCurrentCrew.Items.Add(assem.CurrentCrew);
-            }
+            //NOTE: Window Shrunk to hide components.
+            //if (lbCurrentOptions.SelectedIndex >= 0)
+            //{
+            //    lbCurrentCrew.Items.Clear();
+            //    lbCrewOptions.Items.Clear();
+            //    Assembly assem = (Assembly)lbCurrentOptions.SelectedItem;
+            //    lbCrewOptions.Items.AddRange(manager.getCrewsByCategory(assem.Category, -1).ToArray());
+            //    if (assem.CurrentCrew != null)
+            //        lbCurrentCrew.Items.Add(assem.CurrentCrew);
+            //}
         }
-
+        /// <summary>
+        /// Attempt to write out Precedence Order XML file. If no components are defined, this is essentially useless.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnOrderComponents_Click(object sender, EventArgs e)
         {
             using (PhysicalScheduleForm phyFrm = new PhysicalScheduleForm())
             {
                 List<BuildingComponent> comps = new List<BuildingComponent>();
-                for(int i =0; i < lbComponents.Items.Count; i++)
+                for (int i = 0; i < lbComponents.Items.Count; i++)
                 {
-                    comps.Add((BuildingComponent) lbComponents.Items[i]);
+                    comps.Add((BuildingComponent)lbComponents.Items[i]);
                 }
 
                 phyFrm.Components = comps;
@@ -395,7 +435,6 @@ namespace RevitLibrary.New_Forms
                     MessageBox.Show("Successfully saved Basic Schedule");
             }
         }
-
         private void btnCreateNewOption_Click(object sender, EventArgs e)
         {
             if (lbComponents.SelectedIndex < 0)
@@ -405,7 +444,7 @@ namespace RevitLibrary.New_Forms
             }
             using (NewOptionForm optFrm = new NewOptionForm())
             {
-                if(lbComponents.SelectedIndex >= 0)
+                if (lbComponents.SelectedIndex >= 0)
                 {
                     optFrm.AssemCategory = ((BuildingComponent)lbComponents.SelectedItem).Category;
                     optFrm.CompArea = ((BuildingComponent)lbComponents.SelectedItem).Area;
@@ -431,7 +470,12 @@ namespace RevitLibrary.New_Forms
                 }
             }
         }
-
+        /// <summary>
+        /// Asks for Component and Precendence Order XML files, and runs the NSGAII process, generating results in another XML file.
+        /// Optionally, energy simulation data can be given for use in objective functions
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnNSGAII_Click(object sender, EventArgs e)
         {
             String compFile = "";
@@ -443,34 +487,62 @@ namespace RevitLibrary.New_Forms
                 openDlg.ShowDialog();
 
                 if (!String.IsNullOrEmpty(openDlg.FileName))
-                {
                     compFile = openDlg.FileName;
-                }
-            }
 
-            using (OpenFileDialog openDlg = new OpenFileDialog())
-            {
+
                 openDlg.Title = "Select Precedence File";
                 openDlg.Filter = "XML File|*.xml";
                 openDlg.ShowDialog();
 
                 if (!String.IsNullOrEmpty(openDlg.FileName))
-                {
                     orderFile = openDlg.FileName;
-                }
             }
 
             if (String.IsNullOrEmpty(compFile) || String.IsNullOrEmpty(orderFile))
                 MessageBox.Show("Failed to load necessary files for NSGA-II", "Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
+                //ask about optional parametric options file
+                DialogResult paraRes = MessageBox.Show("Do you want to use Energy simulation results?",
+                                                       "Energy Simulation?",
+                                                       MessageBoxButtons.YesNo,
+                                                       MessageBoxIcon.Question);
+
+                String baseIDF = "";
+                String parametrics = "";
+                String baseDir = "";
+                String pppDir = "";
+                if (paraRes == DialogResult.Yes)
+                {
+                    using (OpenFileDialog openDlg = new OpenFileDialog())
+                    {
+                        openDlg.Title = "Select Parametric Options File";
+                        openDlg.Filter = "XML File|*.xml";
+                        openDlg.ShowDialog();
+
+                        if (!String.IsNullOrEmpty(openDlg.FileName))
+                            parametrics = openDlg.FileName;
+                    }
+                    using (FolderBrowserDialog fdDlg = new FolderBrowserDialog())
+                    {
+                        fdDlg.Description = "Select Folder containing Energy Simulation results";
+                        fdDlg.ShowDialog();
+                        if (!String.IsNullOrEmpty(fdDlg.SelectedPath))
+                            baseDir = fdDlg.SelectedPath;
+                    }
+                }
+
                 try
                 {
                     Process p = new Process();
                     p.StartInfo.WorkingDirectory = NSGAII_DIR;
                     p.StartInfo.FileName = @"NSGAII.exe";
-                    p.StartInfo.Arguments = "\"" + compFile + "\"  \"" + orderFile + "\"";
-                    p.StartInfo.CreateNoWindow = true;
+                    p.StartInfo.Arguments = "\"" + compFile + "\"  \"" + orderFile + "\" 200 500";
+
+                    if (!String.IsNullOrEmpty(parametrics) && !String.IsNullOrEmpty(baseDir))
+                        p.StartInfo.Arguments += " \"" + parametrics + "\" " + baseDir + "\"";
+
+                    p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
                     p.Start();
                     p.WaitForExit();
                 }
@@ -480,12 +552,52 @@ namespace RevitLibrary.New_Forms
                 }
             }
         }
-
         private void lbAssemblies_SelectedIndexChanged(object sender, EventArgs e)
         {
             lbCrewOptions.Items.Clear();
             lbCurrentCrew.Items.Clear();
             lbCurrentOptions.ClearSelected();
+        }
+
+        private void chkCombineComps_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkCombineComps.Checked)
+            {
+                grpCombined.Enabled = true;
+                btnCombineComp.Enabled = true;
+            }
+            else
+            {
+                btnCombineComp.Enabled = false;
+                grpCombined.Enabled = false;
+                txtCombinedCompName.Text = "";
+                txtCombinedCategory.Text = "";
+                txtCombinedArea.Text = "";
+                txtCombinedVolume.Text = "";
+            }
+        }
+
+        private void btnCombineComp_Click(object sender, EventArgs e)
+        {
+            if (cboFoundInModel.SelectedIndex < 0)
+            {
+                MessageBox.Show("No Component in the model was selected.");
+                return;
+            }
+
+            Assembly assoc = (Assembly)cboFoundInModel.SelectedItem;
+
+            if (String.IsNullOrEmpty(txtCombinedArea.Text) || String.IsNullOrEmpty(txtCombinedVolume.Text))
+            {
+                txtCombinedArea.Text = assoc.Area.ToString();
+                txtCombinedVolume.Text = assoc.Volume.ToString();
+            }
+            else
+            {
+                txtCombinedArea.Text = (Double.Parse(txtCombinedArea.Text) + assoc.Area).ToString();
+                txtCombinedVolume.Text = (Double.Parse(txtCombinedVolume.Text) + assoc.Volume).ToString();
+            }
+            ClearControls();
         }
     }
 }

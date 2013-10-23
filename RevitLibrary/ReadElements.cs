@@ -18,6 +18,8 @@ namespace RevitLibrary
         public Result Execute(ExternalCommandData commandData, ref string message, Autodesk.Revit.DB.ElementSet elements)
         {
             Application app = commandData.Application.Application;
+            if (commandData.Application.ActiveUIDocument == null)
+                return Result.Failed;
             Document document = commandData.Application.ActiveUIDocument.Document;
             
             OpenModelDialog(document);
@@ -177,7 +179,6 @@ namespace RevitLibrary
         }*/
         public void OpenModelDialog(Document doc)
         {
-            //Data srch = new Data();
             ModelManagerForm srch = new ModelManagerForm();
             List<String> list = new List<String>();
 
@@ -185,10 +186,9 @@ namespace RevitLibrary
             list.Add("Roofing");
             list.Add("Walls");
 
-           // srch.ElementTypes = list;
             srch.RevitDocument = doc;
 
-            srch.Show();
+            srch.ShowDialog();
         }
     }
 }

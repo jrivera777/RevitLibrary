@@ -13,7 +13,7 @@ namespace RevitLibrary.New_Forms
     {
         public double Area { get; set; }
         public double Volume { get; set; }
-        public String Name { get; set; }
+        public String CompName { get; set; }
         public String Category { get; set; }
         public String Code { get; set; }
         public MissingCompDialog()
@@ -28,16 +28,28 @@ namespace RevitLibrary.New_Forms
         {
             double ar;
             double vol;
-            if (Double.TryParse(txtArea.Text, out ar))
-                this.Area = ar;
-            if (Double.TryParse(txtVolume.Text, out vol))
-                this.Volume = vol;
-            this.Name = txtName.Text;
-            this.Category = txtCategory.Text;
-            this.Code = txtCode.Text;
 
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            if (String.IsNullOrEmpty(txtName.Text))
+                MessageBox.Show("Please enter a valid component name.");
+            else if (String.IsNullOrEmpty(txtCode.Text))
+                MessageBox.Show("Please enter a valid assembly code.");
+            else if (String.IsNullOrEmpty(txtArea.Text))
+                MessageBox.Show("Please enter a valid area.");
+            else if (String.IsNullOrEmpty(txtVolume.Text))
+                MessageBox.Show("Please enter a valid volume.");
+            else
+            {
+                if (Double.TryParse(txtArea.Text, out ar))
+                    this.Area = ar;
+                if (Double.TryParse(txtVolume.Text, out vol))
+                    this.Volume = vol;
+                this.CompName = txtName.Text;
+                this.Category = txtCategory.Text;
+                this.Code = txtCode.Text;
+
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
         }
     }
 }
