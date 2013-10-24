@@ -120,4 +120,9 @@
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="label3.Text" xml:space="preserve">
+    <value>Welcome to the SimulEICon Multi-Objective Decison-Support Tool. Click the "Component Builder" button to start a new simulation.
+
+Or, click the "View Results" button to view previous simulation results.</value>
+  </data>
 </root>

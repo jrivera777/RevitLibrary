@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ModelManagerForm));
             this.label1 = new System.Windows.Forms.Label();
             this.lblFileName = new System.Windows.Forms.Label();
             this.btnComponentBuilder = new System.Windows.Forms.Button();
@@ -82,9 +83,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(357, 54);
             this.label3.TabIndex = 8;
-            this.label3.Text = "Welcome to the SimulEICon simulation tool. Click the \"Component Builder\" button t" +
-                "o start a new simulation.\r\n\r\nOr, click the \"View Results\" button to view previou" +
-                "s simulation results.";
+            this.label3.Text = resources.GetString("label3.Text");
             // 
             // ModelManagerForm
             // 
@@ -98,7 +97,7 @@
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "ModelManagerForm";
-            this.Text = "Model Manager";
+            this.Text = "SimulEICon";
             this.Load += new System.EventHandler(this.ModelManager_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

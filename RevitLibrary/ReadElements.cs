@@ -21,9 +21,8 @@ namespace RevitLibrary
             if (commandData.Application.ActiveUIDocument == null)
                 return Result.Failed;
             Document document = commandData.Application.ActiveUIDocument.Document;
-            
             OpenModelDialog(document);
-            //ReadWallMaterials(document);
+
             return Result.Succeeded;
         }
 
