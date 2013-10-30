@@ -54,6 +54,7 @@ namespace RevitLibrary.Forms
             dvFrm.Owner = this;
             dvFrm.Projects = this.Results;
             dvFrm.CompareType = DataVisualizer.Comparison.TIMEVCOST;
+            dvFrm.Text = "Time VS Cost";
             dvFrm.Show();
         }
 
@@ -63,6 +64,7 @@ namespace RevitLibrary.Forms
             dvFrm.Owner = this;
             dvFrm.Projects = this.Results;
             dvFrm.CompareType = DataVisualizer.Comparison.TIMEVEI;
+            dvFrm.Text = "Time VS EI";
             dvFrm.Show();
         }
 
@@ -72,6 +74,7 @@ namespace RevitLibrary.Forms
             dvFrm.Owner = this;
             dvFrm.Projects = this.Results;
             dvFrm.CompareType = DataVisualizer.Comparison.COSTVEI;
+            dvFrm.Text = "Cost VS EI";
             dvFrm.Show();
         }
 

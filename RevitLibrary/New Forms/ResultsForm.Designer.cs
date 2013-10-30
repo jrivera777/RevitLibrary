@@ -44,6 +44,8 @@
             this.btnSort = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.cbSortBy = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // txtName
@@ -134,7 +136,7 @@
             this.lbProjects.Size = new System.Drawing.Size(512, 173);
             this.lbProjects.TabIndex = 10;
             this.lbProjects.SelectedIndexChanged += new System.EventHandler(this.lbProjects_SelectedIndexChanged);
-            this.lbProjects.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(lbProjects_MouseDoubleClick);
+            this.lbProjects.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lbProjects_MouseDoubleClick);
             // 
             // btnTimeVsCost
             // 
@@ -213,11 +215,31 @@
             this.cbSortBy.Size = new System.Drawing.Size(100, 21);
             this.cbSortBy.TabIndex = 17;
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(198, 69);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(62, 13);
+            this.label6.TabIndex = 18;
+            this.label6.Text = "(Kg of CO2)";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(198, 95);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(37, 13);
+            this.label7.TabIndex = 19;
+            this.label7.Text = "(Days)";
+            // 
             // ResultsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(538, 361);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.cbSortBy);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.btnSort);
@@ -261,5 +283,7 @@
         private System.Windows.Forms.Button btnSort;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox cbSortBy;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
     }
 }

@@ -576,7 +576,7 @@
             this.Controls.Add(this.grpComponents);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "ComponentBuilderForm";
-            this.Text = "Component Builder";
+            this.Text = "SimulEICon - Component Builder";
             this.Load += new System.EventHandler(this.ComponentBuilderForm_Load);
             this.grpComponents.ResumeLayout(false);
             this.grpComponents.PerformLayout();
