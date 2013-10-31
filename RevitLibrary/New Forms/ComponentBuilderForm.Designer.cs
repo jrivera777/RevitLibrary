@@ -292,6 +292,7 @@
             this.btnCombineComp.Size = new System.Drawing.Size(158, 23);
             this.btnCombineComp.TabIndex = 29;
             this.btnCombineComp.Text = "Combine Component";
+            this.toolTip1.SetToolTip(this.btnCombineComp, "Combine current component with any \r\npreviously selected components.");
             this.btnCombineComp.UseVisualStyleBackColor = true;
             this.btnCombineComp.Click += new System.EventHandler(this.btnCombineComp_Click);
             // 
@@ -387,6 +388,8 @@
             this.chkCombineComps.Size = new System.Drawing.Size(129, 17);
             this.chkCombineComps.TabIndex = 27;
             this.chkCombineComps.Text = "Combine Components";
+            this.toolTip1.SetToolTip(this.chkCombineComps, "Enable this checkbox to allow the combination of multiple\r\ncomponents from the mo" +
+                    "del into a single component\r\nthat can be written to the Component File.");
             this.chkCombineComps.UseVisualStyleBackColor = true;
             this.chkCombineComps.CheckedChanged += new System.EventHandler(this.chkCombineComps_CheckedChanged);
             // 
