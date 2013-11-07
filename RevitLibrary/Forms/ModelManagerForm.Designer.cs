@@ -36,6 +36,8 @@
             this.btnViewResults = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.btnDbLoc = new System.Windows.Forms.Button();
+            this.lblDBNotSet = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -85,11 +87,32 @@
             this.label3.TabIndex = 8;
             this.label3.Text = resources.GetString("label3.Text");
             // 
+            // btnDbLoc
+            // 
+            this.btnDbLoc.Location = new System.Drawing.Point(427, 129);
+            this.btnDbLoc.Name = "btnDbLoc";
+            this.btnDbLoc.Size = new System.Drawing.Size(150, 23);
+            this.btnDbLoc.TabIndex = 9;
+            this.btnDbLoc.Text = "Set Database Location";
+            this.btnDbLoc.UseVisualStyleBackColor = true;
+            this.btnDbLoc.Click += new System.EventHandler(this.btnDbLoc_Click);
+            // 
+            // lblDBNotSet
+            // 
+            this.lblDBNotSet.AutoSize = true;
+            this.lblDBNotSet.ForeColor = System.Drawing.Color.Red;
+            this.lblDBNotSet.Location = new System.Drawing.Point(18, 103);
+            this.lblDBNotSet.Name = "lblDBNotSet";
+            this.lblDBNotSet.Size = new System.Drawing.Size(0, 13);
+            this.lblDBNotSet.TabIndex = 10;
+            // 
             // ModelManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(589, 166);
+            this.Controls.Add(this.lblDBNotSet);
+            this.Controls.Add(this.btnDbLoc);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btnViewResults);
             this.Controls.Add(this.btnComponentBuilder);
@@ -112,5 +135,7 @@
         private System.Windows.Forms.Button btnViewResults;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Button btnDbLoc;
+        private System.Windows.Forms.Label lblDBNotSet;
     }
 }

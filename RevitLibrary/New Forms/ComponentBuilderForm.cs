@@ -281,7 +281,7 @@ namespace RevitLibrary.New_Forms
                 txtArea.Text = bComp.Area.ToString();
                 txtVolume.Text = bComp.Volume.ToString();
                 lbCurrentOptions.Items.AddRange(bComp.Assemblies.ToArray());
-                lbAssemblies.Items.AddRange(manager.getAssembliesByCategory(bComp.Category, 30).ToArray());
+                lbAssemblies.Items.AddRange(manager.getAssembliesByCategory(bComp.Category, 50).ToArray());
             }
         }
         private void btnAddOption_Click(object sender, EventArgs e)

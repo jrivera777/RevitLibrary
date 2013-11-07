@@ -19,7 +19,9 @@ namespace RevitLibrary
 {
     class ElementManager
     {
-        private String connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\Documents and Settings\\fdot\\My Documents\\Revit Stuff\\ProjectComponentDB.accdb;Persist Security Info=True";
+        private const String connBase = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Persist Security Info=True";
+        private static String connectionString = "";
+        private static Boolean dbLocSet;
         private Document doc;
         private Dictionary<Assembly, double> assemblyVolumes;
         private Dictionary<Assembly, double> assemblyAreas;
@@ -32,6 +34,16 @@ namespace RevitLibrary
         public ElementManager(Document revDoc)
         {
             doc = revDoc;
+            dbLocSet = false;
+        }
+        public Boolean isDBLocationSet()
+        {
+            return dbLocSet;
+        }
+        public static void setDBLocation(String loc)
+        {
+            connectionString = String.Format(connBase, loc);
+            dbLocSet = true;
         }
         public ICollection<Element> getElementsOfCategory(Document doc, BuiltInCategory cat, Type ty)
         {
@@ -206,7 +218,6 @@ namespace RevitLibrary
             }
             return assemblies;
         }
-
         public void WriteOutWalls(String fName, List<Assembly> wallAssemblies)
         {
             using (XmlWriter writer = XmlWriter.Create(fName))
@@ -244,104 +255,6 @@ namespace RevitLibrary
                 writer.WriteEndElement();
             }
         }
-        //public void WriteOutWalls(String fName)
-        //{
-        //    double totalVolume = 0.0;
-        //    double totalArea = 0.0;
-
-        //    //hold total volume for each assembly code
-        //    Dictionary<String, double> assemblyVolumes = new Dictionary<String, double>();
-        //    Dictionary<String, double> assemblyAreas = new Dictionary<String, double>();
-
-        //    ICollection<Element> walls = getElementsOfCategory(doc, BuiltInCategory.OST_Walls, typeof(Wall));
-
-        //    //"C:\\Documents and Settings\\fdot\\Desktop\\Walls.xml"
-        //    using (XmlWriter writer = XmlWriter.Create(fName))
-        //    {
-
-        //        writer.WriteStartDocument();
-        //        writer.WriteStartElement("WallData");
-
-        //        writer.WriteStartElement("Walls");
-        //        foreach (Element e in walls)
-        //        {
-        //            Wall w = null;
-        //            WallType wType = null;
-        //            w = (Wall)e;
-        //            writer.WriteStartElement("Wall");
-
-        //            wType = w.WallType;
-        //            writer.WriteElementString("WallType", wType.Name);
-        //            if (wType.Kind == WallKind.Basic)
-        //            {
-        //                //Write Assembly Name
-        //                String elemName = "AssemblyDescripton";
-        //                Parameter assemName = wType.get_Parameter("Assembly Description");
-
-        //                writer.WriteElementString(elemName, assemName.AsString());
-
-        //                //Write Assembly Code
-        //                elemName = "AssemblyCode";
-        //                Parameter assemCode = wType.get_Parameter("Assembly Code");
-        //                writer.WriteElementString(elemName, assemCode.AsString());
-
-        //                foreach (Parameter p in w.Parameters)
-        //                {
-        //                    if (p.Definition.Name.Equals("Area"))
-        //                    {
-        //                        if (p.HasValue)
-        //                        {
-        //                            writer.WriteElementString(p.Definition.Name, p.AsDouble().ToString());
-
-        //                            if (assemblyAreas.ContainsKey(assemCode.AsString()))
-        //                            {
-        //                                double area = assemblyAreas[assemCode.AsString()];
-        //                                totalArea += area;
-        //                                assemblyAreas[assemCode.AsString()] = area + p.AsDouble();
-        //                            }
-        //                            else
-        //                                assemblyAreas.Add(assemCode.AsString(), p.AsDouble());
-        //                        }
-        //                        else
-        //                            writer.WriteElementString(p.Definition.Name, "N/A");
-        //                    }
-        //                    else if (p.Definition.Name.Equals("Volume"))
-        //                    {
-        //                        if (p.HasValue)
-        //                        {
-        //                            writer.WriteElementString(p.Definition.Name, p.AsDouble().ToString());
-
-        //                            if (assemblyVolumes.ContainsKey(assemCode.AsString()))
-        //                            {
-        //                                double vol = assemblyVolumes[assemCode.AsString()];
-        //                                totalVolume += vol;
-        //                                assemblyVolumes[assemCode.AsString()] = vol + p.AsDouble();
-        //                            }
-        //                            else
-        //                                assemblyVolumes.Add(assemCode.AsString(), p.AsDouble());
-        //                        }
-        //                        else
-        //                            writer.WriteElementString(p.Definition.Name, "N/A");
-        //                    }
-        //                }
-        //            }
-        //            writer.WriteEndElement(); // end individual Wall element
-        //        }
-        //        writer.WriteEndElement();
-
-        //        WriteAssemblyValue(writer, assemblyVolumes, "Volume");
-        //        WriteAssemblyValue(writer, assemblyAreas, "Area");
-
-        //        Debug.WriteLine("Total Volume: " + totalVolume);
-        //        Debug.WriteLine("Total Area: " + totalArea);
-
-        //        Debug.WriteLine("Finished Volumes");
-        //        writer.WriteEndElement(); //end Walls Element
-        //        Debug.WriteLine("Finished Walls");
-        //        writer.WriteEndDocument();
-        //        Debug.WriteLine("Finished Document");
-        //    }
-        //}
         public void CalculateWallAssemblies(Type ty)
         {
             double totalVolume = 0.0;
@@ -411,116 +324,6 @@ namespace RevitLibrary
                 }
             }
         }
-        //public void WriteOutRoofing()
-        //{
-        //    //Select all elements of type Wall.  Ignore walltypes for now.
-        //    ElementCategoryFilter wallsCategoryfilter = new ElementCategoryFilter(BuiltInCategory.OST_Roofs);
-        //    ElementClassFilter classFilter = new ElementClassFilter(typeof(RoofBase));
-        //    LogicalAndFilter roofInstancesFilter = new LogicalAndFilter(wallsCategoryfilter, classFilter);
-
-        //    FilteredElementCollector collector = new FilteredElementCollector(doc);
-        //    ICollection<Element> roofing = collector.WherePasses(roofInstancesFilter).ToElements();
-        //    System.Windows.Forms.SaveFileDialog saver = new System.Windows.Forms.SaveFileDialog();
-
-        //    using (XmlWriter writer = XmlWriter.Create("C:\\Documents and Settings\\fdot\\Desktop\\Roofing.xml"))
-        //    {
-        //        writer.WriteStartDocument();
-        //        writer.WriteStartElement("Roofing");
-
-        //        foreach (Element e in roofing)
-        //        {
-        //            RoofBase rf = null;
-        //            RoofType rType = null;
-        //            rf = (RoofBase)e;
-        //            writer.WriteStartElement("Roof");
-
-        //            rType = rf.RoofType;
-        //            writer.WriteElementString("RoofType", rType.Name);
-
-        //            //Write Assembly Name
-        //            String elemName = "AssemblyDescripton";
-        //            Parameter assemName = rType.get_Parameter("Assembly Description");
-
-        //            writer.WriteElementString(elemName, assemName.AsString());
-
-        //            //Write Assembly Code
-        //            elemName = "AssemblyCode";
-        //            Parameter assemCode = rType.get_Parameter("Assembly Code");
-        //            writer.WriteElementString(elemName, assemCode.AsString());
-
-        //            foreach (Parameter p in rf.Parameters)
-        //            {
-        //                if (p.Definition.Name.Equals("Area") || p.Definition.Name.Equals("Volume"))
-        //                {
-        //                    if (p.HasValue)
-        //                    {
-        //                        writer.WriteElementString(p.Definition.Name, p.AsDouble().ToString());
-        //                    }
-        //                    else
-        //                        writer.WriteElementString(p.Definition.Name, "N/A");
-        //                }
-        //            }
-
-        //            writer.WriteEndElement(); // end individual Wall element
-        //        }
-        //        writer.WriteEndElement(); //end Walls Element
-        //        writer.WriteEndDocument();
-        //    }
-        //}
-        //public void WriteOutFloors()
-        //{
-        //    //Select all elements of type Wall.  Ignore walltypes for now.
-        //    ElementCategoryFilter wallsCategoryfilter = new ElementCategoryFilter(BuiltInCategory.OST_Floors);
-        //    ElementClassFilter classFilter = new ElementClassFilter(typeof(Floor));
-        //    LogicalAndFilter floorInstancesFilter = new LogicalAndFilter(wallsCategoryfilter, classFilter);
-
-        //    FilteredElementCollector collector = new FilteredElementCollector(doc);
-        //    ICollection<Element> floors = collector.WherePasses(floorInstancesFilter).ToElements();
-        //    System.Windows.Forms.SaveFileDialog saver = new System.Windows.Forms.SaveFileDialog();
-
-        //    using (XmlWriter writer = XmlWriter.Create("C:\\Documents and Settings\\fdot\\Desktop\\Floors.xml"))
-        //    {
-        //        writer.WriteStartDocument();
-        //        writer.WriteStartElement("Floors");
-
-        //        foreach (Element e in floors)
-        //        {
-        //            Floor f = null;
-        //            FloorType fType = null;
-        //            f = (Floor)e;
-        //            writer.WriteStartElement("Floor");
-
-        //            fType = f.FloorType;
-        //            writer.WriteElementString("FloorType", fType.Name);
-        //            //Write Assembly Name
-        //            String elemName = "AssemblyDescripton";
-        //            Parameter assemName = fType.get_Parameter("Assembly Description");
-
-        //            writer.WriteElementString(elemName, assemName.AsString());
-
-        //            //Write Assembly Code
-        //            elemName = "AssemblyCode";
-        //            Parameter assemCode = fType.get_Parameter("Assembly Code");
-        //            writer.WriteElementString(elemName, assemCode.AsString());
-
-        //            foreach (Parameter p in f.Parameters)
-        //            {
-        //                if (p.Definition.Name.Equals("Area") || p.Definition.Name.Equals("Volume"))
-        //                {
-        //                    if (p.HasValue)
-        //                    {
-        //                        writer.WriteElementString(p.Definition.Name, p.AsDouble().ToString());
-        //                    }
-        //                    else
-        //                        writer.WriteElementString(p.Definition.Name, "N/A");
-        //                }
-        //            }
-        //            writer.WriteEndElement(); // end individual Wall element
-        //        }
-        //        writer.WriteEndElement(); //end Walls Element
-        //        writer.WriteEndDocument();
-        //    }
-        //}
         public void WriteAssemblyValue(XmlWriter writer, Dictionary<String, double> assemblyVals, String value)
         {
             writer.WriteStartElement("Assembly" + value + "s");
@@ -535,7 +338,6 @@ namespace RevitLibrary
             writer.WriteEndElement();
             writer.WriteEndElement();
         }
-        
         private OleDbConnection getConnection()
         {
             return new OleDbConnection(connectionString);
@@ -576,40 +378,6 @@ namespace RevitLibrary
                 }
             return assemblies;
         }
-        //private void loadAssemblyMaterials(Assembly a)
-        //{
-        //    List<AssemMaterial> materials = new List<AssemMaterial>();
-        //    using (OleDbConnection conn = this.getConnection())
-        //    {
-        //        conn.Open();
-        //        using (OleDbCommand comm = conn.CreateCommand())
-        //        {
-        //            comm.CommandText = "SELECT MatName, Description, costperunit, co2perunit " +
-        //                                "FROM Material WHERE " +
-        //                                "id in (select materialID from assem_mat where assemblyid = " +
-        //                                "(select id from Assembly where AssemName = ?));";
-                    
-        //            comm.Parameters.Clear();
-        //            comm.Parameters.AddWithValue("@name", a.AssemblyName);
-        //            using (OleDbDataReader matReader = comm.ExecuteReader())
-        //            {
-                            
-        //                while (matReader.Read())
-        //                {
-        //                    //All materials associated with current assembly
-        //                    AssemMaterial aMat = new AssemMaterial();
-        //                    aMat.Name = matReader["MatName"].ToString();
-        //                    aMat.Description = matReader["Description"].ToString();
-        //                    aMat.CostPerUnit = (double)matReader["CostPerUnit"];
-        //                    aMat.CO2PerUnit = (double)matReader["CO2PerUnit"];
-        //                    materials.Add(aMat);
-        //                }
-        //                a.Materials = materials;
-        //            }
-        //        }
-        //    }
-        //}
-
         public int SaveProject(String projName)
         {
             int projID = -1;
@@ -1354,7 +1122,6 @@ namespace RevitLibrary
             }
             return cats;
         }
-
         private void ClearCommandData(OleDbCommand command)
         {
             command.Parameters.Clear();

@@ -33,6 +33,18 @@ namespace RevitLibrary
         {
             lblFileName.Text = RevitDocument.Title;
             manager = new ElementManager(RevitDocument);
+            if (!manager.isDBLocationSet())
+            {
+                lblDBNotSet.Text = "No database location is set! Please set it using the \"Set Database Location\" button.";
+                enableButtons(false);
+            }
+
+        }
+
+        private void enableButtons(Boolean mark)
+        {
+            btnComponentBuilder.Enabled = mark;
+            btnViewResults.Enabled = mark;
         }
         /// <summary>
         /// Create ComponentBuilderForm. Pass in the Revit Document object for use.
@@ -115,6 +127,25 @@ namespace RevitLibrary
                 resFrm.FileName = fName;
                 resFrm.Results = results;
                 resFrm.ShowDialog();
+            }
+        }
+
+        private void btnDbLoc_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openDlg = new OpenFileDialog())
+            {
+                openDlg.Title = "Select Database source file.";
+                DialogResult res = openDlg.ShowDialog(this);
+                if (res == DialogResult.OK)
+                {
+                    String source = openDlg.FileName;
+                    ElementManager.setDBLocation(source);
+                    if (manager.isDBLocationSet())
+                    {
+                        lblDBNotSet.Text = "";
+                        enableButtons(true);
+                    }
+                }
             }
         }
     }
