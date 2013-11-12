@@ -36,7 +36,7 @@ namespace RevitLibrary
         private Dictionary<String, double> volumes;
         private Dictionary<String, Assembly> Assemblies;
         private Dictionary<String, BuildingComponent> comps;
-        private ElementManager manager;
+        private DBManager manager;
         private void FillData(Assembly assem)
         {
             lbMaterials.Items.Clear();
@@ -54,7 +54,7 @@ namespace RevitLibrary
         }
         private void AssemblyManagerForm_Load(object sender, EventArgs e)
         {
-            manager = new ElementManager(RevitDocument);
+            manager = new DBManager(RevitDocument);
             List<Assembly> currentAssemblies = null;
             switch (this.GeneralCategory)
             {

@@ -49,7 +49,7 @@ namespace RevitLibrary
             lblDone.Visible = false;
             String choice = cboElementType.Text;
 
-            ElementManager manager = new ElementManager(RevitDocument);
+            DBManager manager = new DBManager(RevitDocument);
             switch (choice)
             {
                 case "Floors":
@@ -70,7 +70,7 @@ namespace RevitLibrary
             lblDone.Visible = false;
 
             String choice = cboElementType.Text;
-            ElementManager manager = new ElementManager(RevitDocument);
+            DBManager manager = new DBManager(RevitDocument);
             switch (choice)
             {
                 case "Floors":

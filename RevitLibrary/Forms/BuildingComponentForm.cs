@@ -21,7 +21,7 @@ namespace RevitLibrary.Forms
         public DesignOption CurrentDesignOption { get; set; }
         public String ProjectName { get; set; }
         public Boolean ChangesMade { get; set; }
-        private ElementManager manager;
+        private DBManager manager;
         public BuildingComponentForm()
         {
             InitializeComponent();
@@ -29,7 +29,7 @@ namespace RevitLibrary.Forms
 
         private void BuildingComponentForm_Load(object sender, EventArgs e)
         {
-            manager = new ElementManager(this.RevitDocument);
+            manager = new DBManager(this.RevitDocument);
             lblDO.Text = CurrentDesignOption.Name;
             txtDODescription.Text = CurrentDesignOption.Description;
 

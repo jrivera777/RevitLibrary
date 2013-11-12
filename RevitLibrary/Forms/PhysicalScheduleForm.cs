@@ -224,8 +224,7 @@ namespace RevitLibrary.Forms
         {
             Graph g = new Graph("Schedule");
             List<Edge> startEdges = new List<Edge>();
-            Edge currEdge;
-
+            
             Node start = g.AddNode("START");
             start.Attr.Color = Microsoft.Glee.Drawing.Color.Green;
             Node end = g.AddNode("END");

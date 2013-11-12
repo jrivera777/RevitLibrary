@@ -19,7 +19,7 @@ namespace RevitLibrary.New_Forms
 {
     public partial class ComponentBuilderForm : System.Windows.Forms.Form
     {
-        private ElementManager manager;
+        private DBManager manager;
         private const String NSGAII_DIR = @"C:\Documents and Settings\fdot\My Documents\Visual Studio 2010\Projects\RevitLibrary\NSGAII";
         private Dictionary<String, double> areas = new Dictionary<string, double>();
         private Dictionary<String, double> volumes = new Dictionary<string, double>();
@@ -229,7 +229,7 @@ namespace RevitLibrary.New_Forms
         }
         private void ComponentBuilderForm_Load(object sender, EventArgs e)
         {
-            manager = new ElementManager(this.RevitDocument);
+            manager = new DBManager(this.RevitDocument);
 
             foundInModel = manager.RetrieveWallInfo();
             foundInModel.AddRange(manager.RetrieveRoofingInfo());
@@ -508,10 +508,10 @@ namespace RevitLibrary.New_Forms
                                                        MessageBoxButtons.YesNo,
                                                        MessageBoxIcon.Question);
 
-                String baseIDF = "";
+                //String baseIDF = "";
                 String parametrics = "";
                 String baseDir = "";
-                String pppDir = "";
+                //String pppDir = "";
                 if (paraRes == DialogResult.Yes)
                 {
                     using (OpenFileDialog openDlg = new OpenFileDialog())

@@ -17,13 +17,14 @@ using RevitLibrary.New_Forms;
 using System.Xml;
 using System.Diagnostics;
 using RevitLibrary.DataClasses;
+using System.Resources;
 
 namespace RevitLibrary
 {
     public partial class ModelManagerForm : System.Windows.Forms.Form
     {
         public Autodesk.Revit.DB.Document RevitDocument { get; set; }
-        private ElementManager manager;
+        private DBManager manager;
         private List<DesignOption> options;
         public ModelManagerForm()
         {
@@ -32,13 +33,11 @@ namespace RevitLibrary
         private void ModelManager_Load(object sender, EventArgs e)
         {
             lblFileName.Text = RevitDocument.Title;
-            manager = new ElementManager(RevitDocument);
-            if (!manager.isDBLocationSet())
+            if (String.IsNullOrEmpty(DBManager.GetResxDBSource()))
             {
                 lblDBNotSet.Text = "No database location is set! Please set it using the \"Set Database Location\" button.";
                 enableButtons(false);
             }
-
         }
 
         private void enableButtons(Boolean mark)
@@ -136,15 +135,17 @@ namespace RevitLibrary
             {
                 openDlg.Title = "Select Database source file.";
                 DialogResult res = openDlg.ShowDialog(this);
-                if (res == DialogResult.OK)
+                if (res == DialogResult.OK && !String.IsNullOrEmpty(openDlg.FileName))
                 {
                     String source = openDlg.FileName;
-                    ElementManager.setDBLocation(source);
-                    if (manager.isDBLocationSet())
+                    using (IResourceWriter rw = new ResXResourceWriter("resources.resx"))
                     {
-                        lblDBNotSet.Text = "";
-                        enableButtons(true);
+                        rw.AddResource("dbSource", source);
                     }
+
+                    lblDBNotSet.Text = "";
+                    manager = new DBManager(RevitDocument);
+                    enableButtons(true);
                 }
             }
         }

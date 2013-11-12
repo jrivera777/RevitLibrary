@@ -20,7 +20,7 @@ namespace RevitLibrary.Forms
         public Boolean ChangesMade { get; set; }
         public Boolean IsAdd { get; set; }
         private Assembly toSwap;
-        private ElementManager manager;
+        private DBManager manager;
         public AssemblyDetailsForm()
         {
             InitializeComponent();
@@ -28,7 +28,7 @@ namespace RevitLibrary.Forms
 
         private void AssemblyDetailsForm_Load(object sender, EventArgs e)
         {
-            manager = new ElementManager(RevitDocument);
+            manager = new DBManager(RevitDocument);
 
             //if (this.IsAdd)
             //{

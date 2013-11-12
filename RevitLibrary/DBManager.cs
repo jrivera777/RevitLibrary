@@ -14,14 +14,15 @@ using System.Windows.Forms;
 using System.Data.OleDb;
 using System.Data;
 using RevitLibrary.DataClasses;
+using System.Resources;
+using System.Collections;
 
 namespace RevitLibrary
 {
-    class ElementManager
+    class DBManager
     {
         private const String connBase = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Persist Security Info=True";
-        private static String connectionString = "";
-        private static Boolean dbLocSet;
+        private String connectionString = "";
         private Document doc;
         private Dictionary<Assembly, double> assemblyVolumes;
         private Dictionary<Assembly, double> assemblyAreas;
@@ -31,19 +32,18 @@ namespace RevitLibrary
         /// </summary>
         /// <param name="revDoc">Revit documet elements will retrieved from.</param>
         /// 
-        public ElementManager(Document revDoc)
+
+        public DBManager(Document revDoc)
         {
             doc = revDoc;
-            dbLocSet = false;
+            ResXResourceSet rxSet = new ResXResourceSet("resources.resx");
+            String src = GetResxDBSource();
+            connectionString = String.Format(connBase, src);
+
         }
-        public Boolean isDBLocationSet()
+        public void SetDBSource(String src)
         {
-            return dbLocSet;
-        }
-        public static void setDBLocation(String loc)
-        {
-            connectionString = String.Format(connBase, loc);
-            dbLocSet = true;
+            connectionString = String.Format(connBase, Properties.Resources.ResourceManager.GetString("dbSource"));
         }
         public ICollection<Element> getElementsOfCategory(Document doc, BuiltInCategory cat, Type ty)
         {
@@ -60,7 +60,7 @@ namespace RevitLibrary
         {
             List<Assembly> assemblies = new List<Assembly>();
             ICollection<Element> walls = getElementsOfCategory(doc, BuiltInCategory.OST_Walls, typeof(Wall));
-            
+
             foreach (Element e in walls)
             {
                 Wall w = null;
@@ -77,10 +77,10 @@ namespace RevitLibrary
                     assem.Category = AssemblyUtil.GetCategoryFromCode(assem.AssemblyCode);
                     //get all materials associated with this assembly
                     List<AssemMaterial> mats = new List<AssemMaterial>();
-                    
+
                     foreach (Material m in w.Materials)
                     {
-                       // MessageBox.Show(String.Format("{0} : {1}: Area = {2}", assemName.AsString(), m.Name, w.GetMaterialArea(m)));
+                        // MessageBox.Show(String.Format("{0} : {1}: Area = {2}", assemName.AsString(), m.Name, w.GetMaterialArea(m)));
                         AssemMaterial mat = new AssemMaterial();
                         mat.Name = m.Name;
                         mats.Add(mat);
@@ -106,7 +106,7 @@ namespace RevitLibrary
                         }
                     }
                     //if(!assemblies.Contains(assem))
-                        assemblies.Add(assem);
+                    assemblies.Add(assem);
                 }
             }
             return assemblies;
@@ -176,7 +176,7 @@ namespace RevitLibrary
                 fType = floor.FloorType;
 
                 Parameter assemName = fType.get_Parameter("Assembly Description");
-                
+
                 assem.AssemblyName = floor.Name;
                 //assem.AssemblyName = assemName.AsString();
                 Parameter assemCode = fType.get_Parameter("Assembly Code");
@@ -261,8 +261,8 @@ namespace RevitLibrary
             double totalArea = 0.0;
 
             //hold total volume for each assembly code
-           assemblyVolumes = new Dictionary<Assembly, double>();
-           assemblyAreas = new Dictionary<Assembly, double>();
+            assemblyVolumes = new Dictionary<Assembly, double>();
+            assemblyAreas = new Dictionary<Assembly, double>();
 
             ICollection<Element> walls = getElementsOfCategory(doc, BuiltInCategory.OST_Walls, ty);
             foreach (Element e in walls)
@@ -356,7 +356,7 @@ namespace RevitLibrary
                                        "id in (select AssemblyID from comp_assem where componentID = " +
                                        "(select id from BuildingComponent where ComponentName = ?));";
                     comm.Parameters.AddWithValue("@name", bComp.Name);
-                                               
+
                     using (OleDbDataReader reader = comm.ExecuteReader())
                     {
                         while (reader.Read())
@@ -369,13 +369,13 @@ namespace RevitLibrary
                             assemblies.Add(a);
                         }
                     }
-                    foreach(Assembly a in assemblies)
+                    foreach (Assembly a in assemblies)
                     {
                         a.Materials = getMaterialsByAssemblyName(a.AssemblyName);
                     }
-                    }
-                    conn.Close();
                 }
+                conn.Close();
+            }
             return assemblies;
         }
         public int SaveProject(String projName)
@@ -426,7 +426,7 @@ namespace RevitLibrary
             using (OleDbConnection conn = this.getConnection())
             {
                 conn.Open();
-                using(OleDbCommand comm = conn.CreateCommand())
+                using (OleDbCommand comm = conn.CreateCommand())
                 {
                     comm.CommandType = CommandType.Text;
                     comm.CommandText = "SELECT ID FROM Project WHERE ProjectName = ?";
@@ -494,7 +494,7 @@ namespace RevitLibrary
                             assemblies.Add(assem);
                         }
                     }
-                    foreach(Assembly a in assemblies)
+                    foreach (Assembly a in assemblies)
                     {
                         a.Materials = getMaterialsByAssemblyName(a.AssemblyName);
                     }
@@ -515,7 +515,7 @@ namespace RevitLibrary
                     comm.CommandText = "Select AssemName, Description from Assembly Where AssemblyCode=?";
                     comm.Parameters.AddWithValue("@code", code);
 
-                    
+
                     using (OleDbDataReader reader = comm.ExecuteReader())
                     {
                         while (reader.Read())
@@ -546,7 +546,7 @@ namespace RevitLibrary
                     if (max < 0)
                         comm.CommandText = "Select AssemName, Description, AssemblyCode FROM Assembly WHERE Category=?";
                     else
-                        comm.CommandText = "Select TOP "+ max + " AssemName, Description, AssemblyCode FROM Assembly WHERE Category=?";
+                        comm.CommandText = "Select TOP " + max + " AssemName, Description, AssemblyCode FROM Assembly WHERE Category=?";
                     comm.Parameters.AddWithValue("@cat", category);
 
 
@@ -613,17 +613,17 @@ namespace RevitLibrary
                 {
 
                     comm.CommandType = CommandType.Text;
-                    comm.CommandText = "SELECT MatName, Description, CostPerUnit, CO2PerUnit, Unit, LaborCost, LaborHours, DailyOutput " + 
-                                       "FROM Material INNER JOIN Labor ON (Material.ID = Labor.MaterialID)" + 
+                    comm.CommandText = "SELECT MatName, Description, CostPerUnit, CO2PerUnit, Unit, LaborCost, LaborHours, DailyOutput " +
+                                       "FROM Material INNER JOIN Labor ON (Material.ID = Labor.MaterialID)" +
                                        "WHERE Material.ID IN " +
-                                       "(SELECT MaterialID FROM Assem_Mat WHERE AssemblyID = " + 
+                                       "(SELECT MaterialID FROM Assem_Mat WHERE AssemblyID = " +
                                        "(SELECT ID FROM Assembly WHERE AssemName =?)) ORDER BY MatName;";
                     comm.Parameters.AddWithValue("@name", assemName);
                     using (OleDbDataReader reader = comm.ExecuteReader())
                     {
-                        if(reader.HasRows)
+                        if (reader.HasRows)
                         {
-                            materials= new List<AssemMaterial>();
+                            materials = new List<AssemMaterial>();
                             while (reader.Read())
                             {
                                 AssemMaterial m = new AssemMaterial();
@@ -683,7 +683,7 @@ namespace RevitLibrary
                 using (OleDbCommand comm = conn.CreateCommand())
                 {
                     comm.CommandType = CommandType.Text;
-                    comm.CommandText = "SELECT ComponentName, Description FROM BuildingComponent WHERE OptionID =" + 
+                    comm.CommandText = "SELECT ComponentName, Description FROM BuildingComponent WHERE OptionID =" +
                                        " (SELECT id FROM DesignOption WHERE OptionName = ?);";
                     comm.Parameters.AddWithValue("@name", dOpt.Name);
                     using (OleDbDataReader reader = comm.ExecuteReader())
@@ -711,9 +711,9 @@ namespace RevitLibrary
                 using (OleDbCommand comm = conn.CreateCommand())
                 {
                     comm.CommandType = CommandType.Text;
-                    comm.CommandText = "SELECT SUM(costperunit) as AssemblyCost "+
+                    comm.CommandText = "SELECT SUM(costperunit) as AssemblyCost " +
                                        "FROM Material WHERE id in " +
-                                       "(select materialID from assem_mat where assemblyid = "+
+                                       "(select materialID from assem_mat where assemblyid = " +
                                        "(select id from Assembly where AssemName = ?));";
                     comm.Parameters.AddWithValue("@name", assem.AssemblyName);
                     Object obj = comm.ExecuteScalar();
@@ -728,20 +728,20 @@ namespace RevitLibrary
         private int getDesignOptionID(DesignOption designOp, String projectName)
         {
             int id = -1;
-            using(OleDbConnection conn = this.getConnection())
+            using (OleDbConnection conn = this.getConnection())
             {
                 conn.Open();
-                using(OleDbCommand comm = conn.CreateCommand())
+                using (OleDbCommand comm = conn.CreateCommand())
                 {
                     comm.CommandType = CommandType.Text;
-                    comm.CommandText = "SELECT ID FROM DesignOption WHERE OptionName = ? and "+
+                    comm.CommandText = "SELECT ID FROM DesignOption WHERE OptionName = ? and " +
                                         "ProjectID = (SELECT ID FROM Project where Projectname = ?);";
                     comm.Parameters.AddWithValue("@optName", designOp.Name.Trim());
                     comm.Parameters.AddWithValue("@pName", projectName.Trim());
 
                     using (OleDbDataReader reader = comm.ExecuteReader())
                     {
-                        while(reader.Read())
+                        while (reader.Read())
                             id = (int)reader["ID"];
                     }
                 }
@@ -760,7 +760,7 @@ namespace RevitLibrary
                     comm.CommandText = "SELECT ID FROM BuildingComponent WHERE ProjectID = ?;";
                     comm.Parameters.AddWithValue("@projID", projID);
                     List<int> ids = new List<int>();
-                    using(OleDbDataReader reader = comm.ExecuteReader())
+                    using (OleDbDataReader reader = comm.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -768,7 +768,7 @@ namespace RevitLibrary
                             ids.Add(id);
                         }
                     }
-                    
+
                     //remove all related component-to-assembly references
                     foreach (int id in ids)
                     {
@@ -813,7 +813,7 @@ namespace RevitLibrary
                         int saved = comm.ExecuteNonQuery();
                         if (saved < 1)
                             return false;
-                        
+
                         this.ClearCommandData(comm);
                         //gets newly created ID from previous statement
                         comm.CommandText = "SELECT @@IDENTITY";
@@ -826,18 +826,18 @@ namespace RevitLibrary
                         if (id > 0)
                         {
                             this.ClearCommandData(comm);
-                            
+
                             foreach (Assembly assem in bComp.Assemblies)
                             {
 
                                 comm.Parameters.Clear();
                                 comm.CommandText = "(Select ID FROM Assembly WHERE AssemName = ? and AssemblyCode = ?)";
-                                comm.Parameters.AddWithValue("@assemName",assem.AssemblyName);
+                                comm.Parameters.AddWithValue("@assemName", assem.AssemblyName);
                                 comm.Parameters.AddWithValue("@assemCode", assem.AssemblyCode);
                                 obj = comm.ExecuteScalar();
 
                                 int assemID = -1;
-                                if(obj != null && !(obj is DBNull))
+                                if (obj != null && !(obj is DBNull))
                                     assemID = (int)obj;
 
                                 this.ClearCommandData(comm);
@@ -869,12 +869,12 @@ namespace RevitLibrary
                     using (OleDbCommand comm = conn.CreateCommand())
                     {
                         DesignOptID = this.getDesignOptionID(designOp, projectName);
-                        
+
                         ClearCommandData(comm);
                         //No design option found.  Add a new one
                         if (DesignOptID < 0)
                         {
-                            comm.CommandText = "INSERT INTO DesignOption (OptionName, Description, ProjectID)" + 
+                            comm.CommandText = "INSERT INTO DesignOption (OptionName, Description, ProjectID)" +
                                                " values (?, ?, (Select ID FROM Project WHERE Project Name = ?));";
                             comm.Parameters.AddWithValue("@optName", designOp.Name);
                             comm.Parameters.AddWithValue("@desc", designOp.Description);
@@ -893,7 +893,7 @@ namespace RevitLibrary
                     using (OleDbCommand comm = conn.CreateCommand())
                     {
                         comm.CommandType = CommandType.Text;
-                        for (int i = 0; i < designOp.Components.Count(); i ++)
+                        for (int i = 0; i < designOp.Components.Count(); i++)
                         {
                             BuildingComponent bComp = designOp.Components[i];
                             ClearCommandData(comm);
@@ -913,7 +913,7 @@ namespace RevitLibrary
                                 if (updated == 0)
                                 {
                                     ClearCommandData(comm);
-                                    comm.CommandText = "INSERT INTO BuildingComponent (ComponentName, Description, OptionID) " + 
+                                    comm.CommandText = "INSERT INTO BuildingComponent (ComponentName, Description, OptionID) " +
                                                         "values (?, ?, ?);";
                                     comm.Parameters.AddWithValue("@name", bComp.Name);
                                     comm.Parameters.AddWithValue("@desc", bComp.Description);
@@ -1061,16 +1061,16 @@ namespace RevitLibrary
                                             continue;
 
                                         ClearCommandData(comm);
-                                        comm.CommandText = "Insert into MaterialSummary (MaterialID, SummaryTypeID, Manufacturing, " 
-                                                            + "Construction, Maintenance, EndofLife, Operation) "               
+                                        comm.CommandText = "Insert into MaterialSummary (MaterialID, SummaryTypeID, Manufacturing, "
+                                                            + "Construction, Maintenance, EndofLife, Operation) "
                                                             + "values (?, ?, ?, ?, ?, ?, ?)";
                                         comm.Parameters.AddWithValue("@mat", matID);
                                         comm.Parameters.AddWithValue("@type", typeID);
                                         comm.Parameters.AddWithValue("@manu", phases[(int)MaterialSummary.SummaryPhase.MANUFACTURING]);
-                                        comm.Parameters.AddWithValue("@const",phases[(int)MaterialSummary.SummaryPhase.CONSTRUCTION]);
-                                        comm.Parameters.AddWithValue("@main",phases[(int)MaterialSummary.SummaryPhase.MAINTENANCE]);
+                                        comm.Parameters.AddWithValue("@const", phases[(int)MaterialSummary.SummaryPhase.CONSTRUCTION]);
+                                        comm.Parameters.AddWithValue("@main", phases[(int)MaterialSummary.SummaryPhase.MAINTENANCE]);
                                         comm.Parameters.AddWithValue("@end", phases[(int)MaterialSummary.SummaryPhase.END_OF_LIFE]);
-                                        comm.Parameters.AddWithValue("@oper",phases[(int)MaterialSummary.SummaryPhase.OPERATION]);
+                                        comm.Parameters.AddWithValue("@oper", phases[(int)MaterialSummary.SummaryPhase.OPERATION]);
                                         comm.ExecuteNonQuery();
                                     }
                                 }
@@ -1126,6 +1126,21 @@ namespace RevitLibrary
         {
             command.Parameters.Clear();
             command.CommandText = "";
+        }
+        public static String GetResxDBSource()
+        {
+            if (!System.IO.File.Exists("resources.resx"))
+                return null;
+            using (ResXResourceReader resxReader = new ResXResourceReader("resources.resx"))
+            {
+                foreach (DictionaryEntry entry in resxReader)
+                {
+                    if (entry.Key.Equals("dbSource"))
+                        return (String)entry.Value;
+                }
+            }
+
+            return null;
         }
     }
 }

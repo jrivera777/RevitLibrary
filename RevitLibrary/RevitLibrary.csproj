@@ -72,7 +72,7 @@
     <Compile Include="DataClasses\MaterialSummary.cs" />
     <Compile Include="DataClasses\OrderableComponent.cs" />
     <Compile Include="DataClasses\ProjectResult.cs" />
-    <Compile Include="ElementManager.cs" />
+    <Compile Include="DBManager.cs" />
     <Compile Include="DataClasses\Assembly.cs" />
     <Compile Include="DataClasses\AssemMaterial.cs" />
     <Compile Include="Forms\AssemblyDetailsForm.cs">

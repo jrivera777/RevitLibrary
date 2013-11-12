@@ -116,7 +116,7 @@ namespace RevitLibrary.New_Forms
                 CreatedOption.Duration = Double.Parse(txtDuration.Text);
                 CreatedOption.Category = this.AssemCategory;
 
-                ElementManager manager = new ElementManager(RevitDocument);
+                DBManager manager = new DBManager(RevitDocument);
                 if (!manager.saveAssembly(CreatedOption))
                     MessageBox.Show("Failed to save Option.");
             }
