@@ -18,6 +18,7 @@ using System.Xml;
 using System.Diagnostics;
 using RevitLibrary.DataClasses;
 using System.Resources;
+using System.Configuration;
 
 namespace RevitLibrary
 {
@@ -32,8 +33,8 @@ namespace RevitLibrary
         }
         private void ModelManager_Load(object sender, EventArgs e)
         {
-            lblFileName.Text = RevitDocument.Title;
-            if (String.IsNullOrEmpty(DBManager.GetResxDBSource()))
+            String src = Properties.Settings.Default.dbSource;
+            if (String.IsNullOrEmpty(src))
             {
                 lblDBNotSet.Text = "No database location is set! Please set it using the \"Set Database Location\" button.";
                 enableButtons(false);
@@ -137,12 +138,9 @@ namespace RevitLibrary
                 DialogResult res = openDlg.ShowDialog(this);
                 if (res == DialogResult.OK && !String.IsNullOrEmpty(openDlg.FileName))
                 {
-                    String source = openDlg.FileName;
-                    using (IResourceWriter rw = new ResXResourceWriter("resources.resx"))
-                    {
-                        rw.AddResource("dbSource", source);
-                    }
-
+                    Properties.Settings.Default.dbSource = openDlg.FileName;
+                    Properties.Settings.Default.Save();
+                    Properties.Settings.Default.Reload();
                     lblDBNotSet.Text = "";
                     manager = new DBManager(RevitDocument);
                     enableButtons(true);

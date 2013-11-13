@@ -32,5 +32,17 @@ namespace RevitLibrary.Properties {
                 return ((string)(this["SimulEIConDB"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string dbSource {
+            get {
+                return ((string)(this["dbSource"]));
+            }
+            set {
+                this["dbSource"] = value;
+            }
+        }
     }
 }

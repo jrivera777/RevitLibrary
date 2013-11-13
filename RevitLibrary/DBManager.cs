@@ -36,14 +36,9 @@ namespace RevitLibrary
         public DBManager(Document revDoc)
         {
             doc = revDoc;
-            ResXResourceSet rxSet = new ResXResourceSet("resources.resx");
-            String src = GetResxDBSource();
+            String src = Properties.Settings.Default.dbSource;
             connectionString = String.Format(connBase, src);
 
-        }
-        public void SetDBSource(String src)
-        {
-            connectionString = String.Format(connBase, Properties.Resources.ResourceManager.GetString("dbSource"));
         }
         public ICollection<Element> getElementsOfCategory(Document doc, BuiltInCategory cat, Type ty)
         {
@@ -1126,21 +1121,6 @@ namespace RevitLibrary
         {
             command.Parameters.Clear();
             command.CommandText = "";
-        }
-        public static String GetResxDBSource()
-        {
-            if (!System.IO.File.Exists("resources.resx"))
-                return null;
-            using (ResXResourceReader resxReader = new ResXResourceReader("resources.resx"))
-            {
-                foreach (DictionaryEntry entry in resxReader)
-                {
-                    if (entry.Key.Equals("dbSource"))
-                        return (String)entry.Value;
-                }
-            }
-
-            return null;
         }
     }
 }

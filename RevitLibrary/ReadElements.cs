@@ -26,50 +26,50 @@ namespace RevitLibrary
             return Result.Succeeded;
         }
 
-       /** public void GetMaterial(Document document, FamilyInstance window)
-        {
-            Materials materials = document.Settings.Materials;
-            FamilySymbol windowSymbol = window.Symbol;
-            Category category = windowSymbol.Category;
-            Autodesk.Revit.DB.Material frameExteriorMaterial = null;
-            Autodesk.Revit.DB.Material frameInteriorMaterial = null;
-            Autodesk.Revit.DB.Material sashMaterial = null;
+        /** public void GetMaterial(Document document, FamilyInstance window)
+         {
+             Materials materials = document.Settings.Materials;
+             FamilySymbol windowSymbol = window.Symbol;
+             Category category = windowSymbol.Category;
+             Autodesk.Revit.DB.Material frameExteriorMaterial = null;
+             Autodesk.Revit.DB.Material frameInteriorMaterial = null;
+             Autodesk.Revit.DB.Material sashMaterial = null;
 
-            // Check the paramters first
-            foreach (Parameter parameter in windowSymbol.Parameters)
-            {
-                switch (parameter.Definition.Name)
-                {
-                    case "Frame Exterior Material":
-                        frameExteriorMaterial = materials.get_Item(parameter.AsElementId());
-                        break;
-                    case "Frame Interior Material":
-                        frameInteriorMaterial = materials.get_Item(parameter.AsElementId());
-                        break;
-                    case "Sash":
-                        sashMaterial = materials.get_Item(parameter.AsElementId());
-                        break;
-                    default:
-                        break;
-                }
-            }
-            // Try category if the material is set by category
-            if (null == frameExteriorMaterial)
-                frameExteriorMaterial = category.Material;
+             // Check the paramters first
+             foreach (Parameter parameter in windowSymbol.Parameters)
+             {
+                 switch (parameter.Definition.Name)
+                 {
+                     case "Frame Exterior Material":
+                         frameExteriorMaterial = materials.get_Item(parameter.AsElementId());
+                         break;
+                     case "Frame Interior Material":
+                         frameInteriorMaterial = materials.get_Item(parameter.AsElementId());
+                         break;
+                     case "Sash":
+                         sashMaterial = materials.get_Item(parameter.AsElementId());
+                         break;
+                     default:
+                         break;
+                 }
+             }
+             // Try category if the material is set by category
+             if (null == frameExteriorMaterial)
+                 frameExteriorMaterial = category.Material;
 
 
-            if (null == frameInteriorMaterial)
-                frameInteriorMaterial = category.Material;
-            if (null == sashMaterial)
-                sashMaterial = category.Material;
-            // Show the result because the category may have a null Material,
-            // the Material objects need to be checked.
-            string materialsInfo = "Frame Exterior Material: " + (null != frameExteriorMaterial ? frameExteriorMaterial.Name : "null") + "\n";
-            materialsInfo += "Frame Interior Material: " + (null != frameInteriorMaterial ? frameInteriorMaterial.Name : "null") + "\n";
-            materialsInfo += "Sash: " + (null != sashMaterial ? sashMaterial.Name : "null") + "\n";
-            TaskDialog.Show("Revit", materialsInfo);
-        }*/
-        
+             if (null == frameInteriorMaterial)
+                 frameInteriorMaterial = category.Material;
+             if (null == sashMaterial)
+                 sashMaterial = category.Material;
+             // Show the result because the category may have a null Material,
+             // the Material objects need to be checked.
+             string materialsInfo = "Frame Exterior Material: " + (null != frameExteriorMaterial ? frameExteriorMaterial.Name : "null") + "\n";
+             materialsInfo += "Frame Interior Material: " + (null != frameInteriorMaterial ? frameInteriorMaterial.Name : "null") + "\n";
+             materialsInfo += "Sash: " + (null != sashMaterial ? sashMaterial.Name : "null") + "\n";
+             TaskDialog.Show("Revit", materialsInfo);
+         }*/
+
         public void ReadWallMaterials(Document doc)
         {
             ElementCategoryFilter wallsCategoryfilter = new ElementCategoryFilter(BuiltInCategory.OST_Walls);
@@ -79,7 +79,7 @@ namespace RevitLibrary
 
             FilteredElementCollector collector = new FilteredElementCollector(doc);
             ICollection<Element> walls = collector.WherePasses(wallInstancesFilter).ToElements();
-            
+
             TextWriter writer = new StreamWriter("C:\\Documents and Settings\\fdot\\Desktop\\materials.txt");
             foreach (Element e in walls)
             {
@@ -91,37 +91,37 @@ namespace RevitLibrary
 
                 if (wType.Kind == WallKind.Basic)
                 {
-                        //Write Assembly Name
-                        writer.Write("Assembly Description: ");
-                        Parameter assemName = wType.get_Parameter("Assembly Description");
-                        writeValueByStorageType(assemName, writer, doc);
-                        writer.WriteLine();
+                    //Write Assembly Name
+                    writer.Write("Assembly Description: ");
+                    Parameter assemName = wType.get_Parameter("Assembly Description");
+                    writeValueByStorageType(assemName, writer, doc);
+                    writer.WriteLine();
 
-                        //Write Assembly Code
-                        writer.Write("Assembly Code: ");
-                        Parameter assemCode = wType.get_Parameter("Assembly Code");
-                        writeValueByStorageType(assemCode, writer, doc);
-                        writer.WriteLine();
+                    //Write Assembly Code
+                    writer.Write("Assembly Code: ");
+                    Parameter assemCode = wType.get_Parameter("Assembly Code");
+                    writeValueByStorageType(assemCode, writer, doc);
+                    writer.WriteLine();
 
-                        foreach (Material m in w.Materials)
-                        {
-                            writer.WriteLine("Material: " + m.Name + " - Area:" + w.GetMaterialArea(m));
-                        }
-                        //foreach (Parameter p in w.Parameters)
-                        //{
-                        //    if (p.Definition.Name.Equals("Area") || p.Definition.Name.Equals("Volume"))
-                        //    {
-                        //        writer.Write("\t" + p.Definition.Name + ": ");
-                        //        if (p.HasValue)
-                        //        {
-                        //            writeValueByStorageType(p, writer, doc);
-                        //        }
-                        //        else
-                        //            writer.Write("N/A");
-                        //        writer.WriteLine();
-                        //    }
-                        //}
+                    foreach (Material m in w.Materials)
+                    {
+                        writer.WriteLine("Material: " + m.Name + " - Area:" + w.GetMaterialArea(m));
                     }
+                    //foreach (Parameter p in w.Parameters)
+                    //{
+                    //    if (p.Definition.Name.Equals("Area") || p.Definition.Name.Equals("Volume"))
+                    //    {
+                    //        writer.Write("\t" + p.Definition.Name + ": ");
+                    //        if (p.HasValue)
+                    //        {
+                    //            writeValueByStorageType(p, writer, doc);
+                    //        }
+                    //        else
+                    //            writer.Write("N/A");
+                    //        writer.WriteLine();
+                    //    }
+                    //}
+                }
                 //}
 
                 writer.WriteLine();
@@ -179,14 +179,7 @@ namespace RevitLibrary
         public void OpenModelDialog(Document doc)
         {
             ModelManagerForm srch = new ModelManagerForm();
-            List<String> list = new List<String>();
-
-            list.Add("Floors");
-            list.Add("Roofing");
-            list.Add("Walls");
-
             srch.RevitDocument = doc;
-
             srch.ShowDialog();
         }
     }
