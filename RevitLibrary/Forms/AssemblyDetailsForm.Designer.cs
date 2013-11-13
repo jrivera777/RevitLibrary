@@ -95,9 +95,9 @@
             // 
             this.lbMaterials.FormattingEnabled = true;
             this.lbMaterials.HorizontalScrollbar = true;
-            this.lbMaterials.Location = new System.Drawing.Point(125, 19);
+            this.lbMaterials.Location = new System.Drawing.Point(71, 19);
             this.lbMaterials.Name = "lbMaterials";
-            this.lbMaterials.Size = new System.Drawing.Size(195, 95);
+            this.lbMaterials.Size = new System.Drawing.Size(249, 95);
             this.lbMaterials.TabIndex = 4;
             this.lbMaterials.SelectedIndexChanged += new System.EventHandler(this.lblMaterials_SelectedIndexChanged);
             // 
