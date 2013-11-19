@@ -19,6 +19,8 @@ namespace RevitLibrary.New_Forms
 {
     public partial class ComponentBuilderForm : System.Windows.Forms.Form
     {
+        private BackgroundWorker worker;
+        delegate void SetTextCallback(string text);
         private DBManager manager;
         private const String NSGAII_DIR = @"C:\Documents and Settings\fdot\My Documents\Visual Studio 2010\Projects\RevitLibrary\NSGAII";
         private Dictionary<String, double> areas = new Dictionary<string, double>();
@@ -227,8 +229,37 @@ namespace RevitLibrary.New_Forms
             }
             return true;
         }
+        private void SetProgressText(string text)
+        {
+            if (this.lblProgress.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(SetProgressText);
+                this.Invoke(d, new object[] { text });
+            }
+            else
+                this.lblProgress.Text = text;
+        }
+        private void bw_getOptions(object sender, DoWorkEventArgs e)
+        {
+            BuildingComponent bComp = (BuildingComponent)e.Argument;
+            this.SetProgressText("Loading...");
+            List<Assembly> assems = manager.getAssembliesByCategory(bComp.Category);
+            e.Result = assems;
+        }
+        private void bw_getOptionsComplete(object sender, RunWorkerCompletedEventArgs e)
+        {
+            List<Assembly> list = (List<Assembly>)e.Result;
+            lbAssemblies.Items.AddRange(list.ToArray());
+            this.SetProgressText("");
+        }
         private void ComponentBuilderForm_Load(object sender, EventArgs e)
         {
+            worker = new BackgroundWorker();
+            worker.WorkerSupportsCancellation = false;
+            worker.WorkerReportsProgress = false;
+            worker.DoWork += bw_getOptions;
+            worker.RunWorkerCompleted += bw_getOptionsComplete;
+
             manager = new DBManager(this.RevitDocument);
 
             foundInModel = manager.RetrieveWallInfo();
@@ -272,6 +303,10 @@ namespace RevitLibrary.New_Forms
             if (lbComponents.SelectedIndex >= 0)
             {
                 BuildingComponent bComp = (BuildingComponent)lbComponents.SelectedItem;
+
+                if (!worker.IsBusy)
+                    worker.RunWorkerAsync(bComp);
+
                 txtSelectedComp.Text = lbComponents.Text;
                 lbCurrentOptions.Items.Clear();
                 lbAssemblies.Items.Clear();
@@ -280,8 +315,6 @@ namespace RevitLibrary.New_Forms
                 cboFoundInModel.SelectedIndex = -1;
                 txtArea.Text = bComp.Area.ToString();
                 txtVolume.Text = bComp.Volume.ToString();
-                lbCurrentOptions.Items.AddRange(bComp.Assemblies.ToArray());
-                lbAssemblies.Items.AddRange(manager.getAssembliesByCategory(bComp.Category, 50).ToArray());
             }
         }
         private void btnAddOption_Click(object sender, EventArgs e)

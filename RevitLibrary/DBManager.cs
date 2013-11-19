@@ -529,6 +529,42 @@ namespace RevitLibrary
             }
             return assemblies;
         }
+        public List<Assembly> getAssembliesByCategory(String category)
+        {
+            return getAssembliesByCategory(category, -1);
+        }
+        public List<Assembly> getAssemblRangeByCategory(String category, int nRows, int group)
+        {
+            List<Assembly> assemblies = new List<Assembly>();
+            using (OleDbConnection conn = this.getConnection())
+            {
+                conn.Open();
+                using (OleDbCommand comm = conn.CreateCommand())
+                {
+                    comm.CommandType = CommandType.Text;
+                    comm.CommandText = "Select TOP Row_Per_Page * From [Select TOP (TotRows - ((Page_Number - 1) * Row_Per_Page) From SampleTable Order By ColumnName DESC] Order By ColumnName ASC";
+                    comm.Parameters.AddWithValue("@cat", category);
+
+
+                    using (OleDbDataReader reader = comm.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Assembly a = new Assembly();
+                            //Basic assembly information
+                            a.AssemblyName = reader["AssemName"].ToString();
+                            a.Description = reader["Description"].ToString();
+                            a.AssemblyCode = reader["AssemblyCode"].ToString();
+                            a.Category = category;
+                            a.Materials = getMaterialsByAssemblyName(a.AssemblyName);
+                            assemblies.Add(a);
+                        }
+                    }
+                }
+                conn.Close();
+            }
+            return assemblies;
+        }
         public List<Assembly> getAssembliesByCategory(String category, int max)
         {
             List<Assembly> assemblies = new List<Assembly>();

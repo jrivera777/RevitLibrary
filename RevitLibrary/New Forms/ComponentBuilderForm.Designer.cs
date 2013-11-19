@@ -76,6 +76,7 @@
             this.lbCurrentCrew = new System.Windows.Forms.ListBox();
             this.btnCreateNewOption = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.lblProgress = new System.Windows.Forms.Label();
             this.grpComponents.SuspendLayout();
             this.grpCombined.SuspendLayout();
             this.SuspendLayout();
@@ -556,11 +557,20 @@
             this.btnCreateNewOption.UseVisualStyleBackColor = true;
             this.btnCreateNewOption.Click += new System.EventHandler(this.btnCreateNewOption_Click);
             // 
+            // lblProgress
+            // 
+            this.lblProgress.AutoSize = true;
+            this.lblProgress.Location = new System.Drawing.Point(20, 472);
+            this.lblProgress.Name = "lblProgress";
+            this.lblProgress.Size = new System.Drawing.Size(0, 13);
+            this.lblProgress.TabIndex = 30;
+            // 
             // ComponentBuilderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(906, 539);
+            this.Controls.Add(this.lblProgress);
             this.Controls.Add(this.btnCreateNewOption);
             this.Controls.Add(this.btnDeleteCrew);
             this.Controls.Add(this.label12);
@@ -639,5 +649,6 @@
         private System.Windows.Forms.TextBox txtCombinedCategory;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Button btnCombineComp;
+        private System.Windows.Forms.Label lblProgress;
     }
 }
