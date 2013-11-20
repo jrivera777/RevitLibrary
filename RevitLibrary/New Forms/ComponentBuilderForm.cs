@@ -22,7 +22,7 @@ namespace RevitLibrary.New_Forms
         private BackgroundWorker worker;
         delegate void SetTextCallback(string text);
         private DBManager manager;
-        private const String NSGAII_DIR = @"C:\Documents and Settings\fdot\My Documents\Visual Studio 2010\Projects\RevitLibrary\NSGAII";
+        //private const String NSGAII_DIR = @"C:\Documents and Settings\fdot\My Documents\Visual Studio 2010\Projects\RevitLibrary\NSGAII";
         private Dictionary<String, double> areas = new Dictionary<string, double>();
         private Dictionary<String, double> volumes = new Dictionary<string, double>();
         private Dictionary<String, Assembly> Assemblies = new Dictionary<string, Assembly>();
@@ -580,7 +580,7 @@ namespace RevitLibrary.New_Forms
                 try
                 {
                     Process p = new Process();
-                    p.StartInfo.WorkingDirectory = NSGAII_DIR;
+                    p.StartInfo.WorkingDirectory = Properties.Settings.Default.nsgaDir + "/NSGA2"; //Assumed to start in the same directory as the DLL.
                     p.StartInfo.FileName = @"NSGAII.exe";
                     p.StartInfo.Arguments = "\"" + compFile + "\"  \"" + orderFile + "\" \"" + resultsDir + "\" 200 500 ";
 

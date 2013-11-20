@@ -26,7 +26,6 @@ namespace RevitLibrary
     {
         public Autodesk.Revit.DB.Document RevitDocument { get; set; }
         private DBManager manager;
-        private List<DesignOption> options;
         public ModelManagerForm()
         {
             InitializeComponent();
