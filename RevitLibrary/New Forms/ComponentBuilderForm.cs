@@ -541,10 +541,9 @@ namespace RevitLibrary.New_Forms
                                                        MessageBoxButtons.YesNo,
                                                        MessageBoxIcon.Question);
 
-                //String baseIDF = "";
                 String parametrics = "";
                 String baseDir = "";
-                //String pppDir = "";
+                String resultsDir = "";
                 if (paraRes == DialogResult.Yes)
                 {
                     using (OpenFileDialog openDlg = new OpenFileDialog())
@@ -558,26 +557,39 @@ namespace RevitLibrary.New_Forms
                     }
                     using (FolderBrowserDialog fdDlg = new FolderBrowserDialog())
                     {
-                        fdDlg.Description = "Select Folder containing Energy Simulation results";
+                        fdDlg.Description = "Select Folder Containing Energy Simulation Results";
                         fdDlg.ShowDialog();
                         if (!String.IsNullOrEmpty(fdDlg.SelectedPath))
                             baseDir = fdDlg.SelectedPath;
                     }
                 }
 
+                using (FolderBrowserDialog fdDlg = new FolderBrowserDialog())
+                {
+                    fdDlg.Description = "Select Folder to Place Results in.";
+                    fdDlg.ShowDialog();
+                    if (!String.IsNullOrEmpty(fdDlg.SelectedPath))
+                        resultsDir = fdDlg.SelectedPath;
+                }
+
+                if (String.IsNullOrEmpty(resultsDir))
+                {
+                    MessageBox.Show("No results folder specified. Cancelling NSGA-II Run!", "Directory Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 try
                 {
                     Process p = new Process();
                     p.StartInfo.WorkingDirectory = NSGAII_DIR;
                     p.StartInfo.FileName = @"NSGAII.exe";
-                    p.StartInfo.Arguments = "\"" + compFile + "\"  \"" + orderFile + "\" 200 500";
+                    p.StartInfo.Arguments = "\"" + compFile + "\"  \"" + orderFile + "\" \"" + resultsDir + "\" 200 500 ";
 
                     if (!String.IsNullOrEmpty(parametrics) && !String.IsNullOrEmpty(baseDir))
-                        p.StartInfo.Arguments += " \"" + parametrics + "\" " + baseDir + "\"";
+                        p.StartInfo.Arguments += " \"" + parametrics + "\" \"" + baseDir + "\"";
 
                     p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
                     p.Start();
-                    p.WaitForExit();
+                    //p.WaitForExit();
                 }
                 catch (Exception ex)
                 {

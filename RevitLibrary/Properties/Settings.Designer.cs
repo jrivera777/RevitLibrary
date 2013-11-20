@@ -44,5 +44,17 @@ namespace RevitLibrary.Properties {
                 this["dbSource"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string nsgaDir {
+            get {
+                return ((string)(this["nsgaDir"]));
+            }
+            set {
+                this["nsgaDir"] = value;
+            }
+        }
     }
 }
