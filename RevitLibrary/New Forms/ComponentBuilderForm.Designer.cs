@@ -151,7 +151,7 @@
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(373, 207);
+            this.btnAdd.Location = new System.Drawing.Point(370, 183);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(133, 23);
             this.btnAdd.TabIndex = 4;
@@ -162,7 +162,7 @@
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(373, 236);
+            this.btnDelete.Location = new System.Drawing.Point(370, 212);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(133, 23);
             this.btnDelete.TabIndex = 5;
@@ -397,7 +397,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(509, 186);
+            this.label3.Location = new System.Drawing.Point(506, 157);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(131, 13);
             this.label3.TabIndex = 17;
@@ -406,9 +406,9 @@
             // lbComponents
             // 
             this.lbComponents.FormattingEnabled = true;
-            this.lbComponents.Location = new System.Drawing.Point(512, 207);
+            this.lbComponents.Location = new System.Drawing.Point(509, 178);
             this.lbComponents.Name = "lbComponents";
-            this.lbComponents.Size = new System.Drawing.Size(141, 121);
+            this.lbComponents.Size = new System.Drawing.Size(141, 134);
             this.lbComponents.TabIndex = 18;
             this.lbComponents.SelectedIndexChanged += new System.EventHandler(this.lbComponents_SelectedIndexChanged_1);
             // 
@@ -560,9 +560,11 @@
             // lblProgress
             // 
             this.lblProgress.AutoSize = true;
-            this.lblProgress.Location = new System.Drawing.Point(20, 472);
+            this.lblProgress.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblProgress.ForeColor = System.Drawing.Color.Red;
+            this.lblProgress.Location = new System.Drawing.Point(20, 467);
             this.lblProgress.Name = "lblProgress";
-            this.lblProgress.Size = new System.Drawing.Size(0, 13);
+            this.lblProgress.Size = new System.Drawing.Size(0, 20);
             this.lblProgress.TabIndex = 30;
             // 
             // ComponentBuilderForm

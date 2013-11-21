@@ -28,6 +28,7 @@ namespace RevitLibrary.New_Forms
         private Dictionary<String, Assembly> Assemblies = new Dictionary<string, Assembly>();
         private Dictionary<String, BuildingComponent> comps = new Dictionary<String, BuildingComponent>();
         private List<Assembly> foundInModel = new List<Assembly>();
+        private int lastSimCompIndex = -1;
         public Document RevitDocument { get; set; }
         public ComponentBuilderForm()
         {
@@ -134,6 +135,7 @@ namespace RevitLibrary.New_Forms
         {
             lbAssemblies.Items.Clear();
             lbComponents.SelectedIndex = -1;
+            lastSimCompIndex = -1;
             txtArea.Clear();
             txtVolume.Clear();
             cboFoundInModel.SelectedIndex = -1;
@@ -239,26 +241,61 @@ namespace RevitLibrary.New_Forms
             else
                 this.lblProgress.Text = text;
         }
+        int ldTick = -1;
         private void bw_getOptions(object sender, DoWorkEventArgs e)
         {
-            BuildingComponent bComp = (BuildingComponent)e.Argument;
-            this.SetProgressText("Loading...");
-            List<Assembly> assems = manager.getAssembliesByCategory(bComp.Category);
-            e.Result = assems;
+            if (worker.CancellationPending)
+            {
+                e.Cancel = true;
+                this.SetProgressText("");
+                lbAssemblies.Items.Clear();
+            }
+            else
+            {
+                BuildingComponent bComp = (BuildingComponent)e.Argument;
+                Boolean done = false;
+                int page = 1;
+                while (!done)
+                {
+                    List<Assembly> assems = manager.getAssemblRangeByCategory(bComp.Category, 50, page++);
+                    if (assems.Count() <= 0)
+                        done = true;
+                    else
+                    {
+                        ldTick = (ldTick + 1) % 4;
+                        worker.ReportProgress(0, assems);
+                    }
+                }
+                e.Result = true;
+            }
+        }
+        private void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            switch (ldTick)
+            {
+                case 0:
+                    this.SetProgressText("Loading");
+                    break;
+                default:
+                    this.SetProgressText(this.lblProgress.Text + ".");
+                    break;
+            }
+            lbAssemblies.Items.AddRange(((List<Assembly>)e.UserState).ToArray());
         }
         private void bw_getOptionsComplete(object sender, RunWorkerCompletedEventArgs e)
         {
-            List<Assembly> list = (List<Assembly>)e.Result;
-            lbAssemblies.Items.AddRange(list.ToArray());
+            //List<Assembly> list = (List<Assembly>)e.Result;
+            //lbAssemblies.Items.AddRange(list.ToArray());
             this.SetProgressText("");
         }
         private void ComponentBuilderForm_Load(object sender, EventArgs e)
         {
             worker = new BackgroundWorker();
-            worker.WorkerSupportsCancellation = false;
-            worker.WorkerReportsProgress = false;
+            worker.WorkerSupportsCancellation = true;
+            worker.WorkerReportsProgress = true;
             worker.DoWork += bw_getOptions;
             worker.RunWorkerCompleted += bw_getOptionsComplete;
+            worker.ProgressChanged += bw_ProgressChanged;
 
             manager = new DBManager(this.RevitDocument);
 
@@ -280,6 +317,7 @@ namespace RevitLibrary.New_Forms
             txtCompDesc.Clear();
             txtCompName.Clear();
             lbComponents.SelectedIndex = -1;
+            lastSimCompIndex = -1;
         }
         private void cboFoundInModel_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -300,8 +338,10 @@ namespace RevitLibrary.New_Forms
         }
         private void lbComponents_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-            if (lbComponents.SelectedIndex >= 0)
+            if (lbComponents.SelectedIndex >= 0 && lbComponents.SelectedIndex != lastSimCompIndex)
             {
+                worker.CancelAsync(); //stop any old request.
+                lastSimCompIndex = lbComponents.SelectedIndex;
                 BuildingComponent bComp = (BuildingComponent)lbComponents.SelectedItem;
 
                 if (!worker.IsBusy)

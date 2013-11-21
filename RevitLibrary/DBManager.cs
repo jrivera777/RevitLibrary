@@ -541,8 +541,22 @@ namespace RevitLibrary
                 conn.Open();
                 using (OleDbCommand comm = conn.CreateCommand())
                 {
+                    int rowCount = -1;
                     comm.CommandType = CommandType.Text;
-                    comm.CommandText = "Select TOP Row_Per_Page * From [Select TOP (TotRows - ((Page_Number - 1) * Row_Per_Page) From SampleTable Order By ColumnName DESC] Order By ColumnName ASC";
+                    comm.CommandText = "Select count(*) FROM Assembly WHERE Category=?";
+                    comm.Parameters.AddWithValue("@cat", category);
+
+                    Object obj = comm.ExecuteScalar();
+                    if (!(obj is DBNull) && (obj != null))
+                        rowCount = (int)obj;
+
+                    int grab = rowCount - ((group - 1) * nRows);
+                    if (grab <= 0)
+                        return assemblies;
+                    comm.Parameters.Clear();
+                    comm.CommandText = "Select TOP " + nRows + " * From (Select TOP " + grab +
+                        " * From (Select ID, AssemName, Description, AssemblyCode FROM Assembly " +
+                        "WHERE Category=?) Order By ID DESC) Order By ID ASC";
                     comm.Parameters.AddWithValue("@cat", category);
 
 
