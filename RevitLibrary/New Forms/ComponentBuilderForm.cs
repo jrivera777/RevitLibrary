@@ -244,18 +244,18 @@ namespace RevitLibrary.New_Forms
         int ldTick = -1;
         private void bw_getOptions(object sender, DoWorkEventArgs e)
         {
-            if (worker.CancellationPending)
+            BuildingComponent bComp = (BuildingComponent)e.Argument;
+            Boolean done = false;
+            int page = 1;
+            while (!done)
             {
-                e.Cancel = true;
-                this.SetProgressText("");
-                lbAssemblies.Items.Clear();
-            }
-            else
-            {
-                BuildingComponent bComp = (BuildingComponent)e.Argument;
-                Boolean done = false;
-                int page = 1;
-                while (!done)
+                if (worker.CancellationPending)
+                {
+                    e.Cancel = true;
+                    this.SetProgressText("");
+                    break;
+                }
+                else
                 {
                     List<Assembly> assems = manager.getAssemblRangeByCategory(bComp.Category, 50, page++);
                     if (assems.Count() <= 0)
@@ -266,26 +266,37 @@ namespace RevitLibrary.New_Forms
                         worker.ReportProgress(0, assems);
                     }
                 }
-                e.Result = true;
             }
+            e.Result = true;
         }
         private void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
+            String ld = "Loading";
             switch (ldTick)
             {
                 case 0:
-                    this.SetProgressText("Loading");
+                    this.SetProgressText(ld);
                     break;
-                default:
-                    this.SetProgressText(this.lblProgress.Text + ".");
+                case 1:
+                    this.SetProgressText(ld + ".");
+                    break;
+                case 2:
+                    this.SetProgressText(ld + "..");
+                    break;
+                case 3:
+                    this.SetProgressText(ld + "...");
                     break;
             }
             lbAssemblies.Items.AddRange(((List<Assembly>)e.UserState).ToArray());
         }
         private void bw_getOptionsComplete(object sender, RunWorkerCompletedEventArgs e)
         {
-            //List<Assembly> list = (List<Assembly>)e.Result;
-            //lbAssemblies.Items.AddRange(list.ToArray());
+            if (e.Cancelled)
+            {
+                lbAssemblies.Items.Clear();
+                BuildingComponent bComp = (BuildingComponent)lbComponents.SelectedItem;
+                worker.RunWorkerAsync(bComp);
+            }
             this.SetProgressText("");
         }
         private void ComponentBuilderForm_Load(object sender, EventArgs e)
@@ -340,11 +351,12 @@ namespace RevitLibrary.New_Forms
         {
             if (lbComponents.SelectedIndex >= 0 && lbComponents.SelectedIndex != lastSimCompIndex)
             {
-                worker.CancelAsync(); //stop any old request.
                 lastSimCompIndex = lbComponents.SelectedIndex;
                 BuildingComponent bComp = (BuildingComponent)lbComponents.SelectedItem;
 
-                if (!worker.IsBusy)
+                if (worker.IsBusy)
+                    worker.CancelAsync();
+                else
                     worker.RunWorkerAsync(bComp);
 
                 txtSelectedComp.Text = lbComponents.Text;
