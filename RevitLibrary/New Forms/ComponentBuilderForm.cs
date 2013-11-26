@@ -367,6 +367,7 @@ namespace RevitLibrary.New_Forms
                 cboFoundInModel.SelectedIndex = -1;
                 txtArea.Text = bComp.Area.ToString();
                 txtVolume.Text = bComp.Volume.ToString();
+                txtCategory.Text = bComp.Category;
             }
         }
         private void btnAddOption_Click(object sender, EventArgs e)
