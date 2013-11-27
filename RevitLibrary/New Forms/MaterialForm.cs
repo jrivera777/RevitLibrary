@@ -64,6 +64,10 @@ namespace RevitLibrary.New_Forms
                 }
             }
         }
+        /// <summary>
+        /// Check for missing required data. Displays message if data is missing.
+        /// </summary>
+        /// <returns></returns>
         public Boolean FoundNulls()
         {
             Boolean success = true;

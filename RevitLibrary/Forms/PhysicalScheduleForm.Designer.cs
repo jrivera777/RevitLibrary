@@ -50,7 +50,7 @@
             this.dgvSchedule.Location = new System.Drawing.Point(12, 12);
             this.dgvSchedule.MultiSelect = false;
             this.dgvSchedule.Name = "dgvSchedule";
-            this.dgvSchedule.Size = new System.Drawing.Size(426, 282);
+            this.dgvSchedule.Size = new System.Drawing.Size(437, 282);
             this.dgvSchedule.TabIndex = 0;
             // 
             // btnSave
@@ -113,9 +113,9 @@
             this.graphPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.graphPanel.Location = new System.Drawing.Point(459, 13);
+            this.graphPanel.Location = new System.Drawing.Point(469, 13);
             this.graphPanel.Name = "graphPanel";
-            this.graphPanel.Size = new System.Drawing.Size(398, 280);
+            this.graphPanel.Size = new System.Drawing.Size(388, 280);
             this.graphPanel.TabIndex = 8;
             // 
             // btnDrawGraph
