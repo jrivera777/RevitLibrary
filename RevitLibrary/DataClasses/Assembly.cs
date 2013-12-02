@@ -6,7 +6,7 @@ using RevitLibrary.DataClasses;
 
 namespace RevitLibrary
 {
-    public class Assembly
+    public class Assembly : ICloneable
     {
         public String AssemblyName { get; set; }
         public double Duration { get; set; }
@@ -151,6 +151,11 @@ namespace RevitLibrary
                 return false;
 
             return this.AssemblyName.Equals(that.AssemblyName) && this.AssemblyCode.Equals(that.AssemblyCode);
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
         }
     }
 }

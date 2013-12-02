@@ -77,6 +77,7 @@
             this.btnCreateNewOption = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.lblProgress = new System.Windows.Forms.Label();
+            this.chkShowIndvComps = new System.Windows.Forms.CheckBox();
             this.grpComponents.SuspendLayout();
             this.grpCombined.SuspendLayout();
             this.SuspendLayout();
@@ -223,7 +224,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(25, 94);
+            this.label8.Location = new System.Drawing.Point(25, 116);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(102, 13);
             this.label8.TabIndex = 13;
@@ -231,7 +232,7 @@
             // 
             // txtVolume
             // 
-            this.txtVolume.Location = new System.Drawing.Point(200, 91);
+            this.txtVolume.Location = new System.Drawing.Point(200, 113);
             this.txtVolume.Name = "txtVolume";
             this.txtVolume.ReadOnly = true;
             this.txtVolume.Size = new System.Drawing.Size(158, 20);
@@ -240,7 +241,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(25, 68);
+            this.label9.Location = new System.Drawing.Point(25, 90);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(89, 13);
             this.label9.TabIndex = 15;
@@ -248,7 +249,7 @@
             // 
             // txtArea
             // 
-            this.txtArea.Location = new System.Drawing.Point(200, 65);
+            this.txtArea.Location = new System.Drawing.Point(200, 87);
             this.txtArea.Name = "txtArea";
             this.txtArea.ReadOnly = true;
             this.txtArea.Size = new System.Drawing.Size(158, 20);
@@ -256,9 +257,8 @@
             // 
             // grpComponents
             // 
-            this.grpComponents.Controls.Add(this.btnCombineComp);
+            this.grpComponents.Controls.Add(this.chkShowIndvComps);
             this.grpComponents.Controls.Add(this.grpCombined);
-            this.grpComponents.Controls.Add(this.chkCombineComps);
             this.grpComponents.Controls.Add(this.label3);
             this.grpComponents.Controls.Add(this.txtArea);
             this.grpComponents.Controls.Add(this.lbComponents);
@@ -288,7 +288,7 @@
             // btnCombineComp
             // 
             this.btnCombineComp.Enabled = false;
-            this.btnCombineComp.Location = new System.Drawing.Point(200, 125);
+            this.btnCombineComp.Location = new System.Drawing.Point(189, 137);
             this.btnCombineComp.Name = "btnCombineComp";
             this.btnCombineComp.Size = new System.Drawing.Size(158, 23);
             this.btnCombineComp.TabIndex = 29;
@@ -299,7 +299,9 @@
             // 
             // grpCombined
             // 
+            this.grpCombined.Controls.Add(this.btnCombineComp);
             this.grpCombined.Controls.Add(this.txtCombinedCategory);
+            this.grpCombined.Controls.Add(this.chkCombineComps);
             this.grpCombined.Controls.Add(this.label16);
             this.grpCombined.Controls.Add(this.txtCombinedCompName);
             this.grpCombined.Controls.Add(this.txtCombinedArea);
@@ -310,7 +312,7 @@
             this.grpCombined.Enabled = false;
             this.grpCombined.Location = new System.Drawing.Point(11, 158);
             this.grpCombined.Name = "grpCombined";
-            this.grpCombined.Size = new System.Drawing.Size(353, 154);
+            this.grpCombined.Size = new System.Drawing.Size(353, 169);
             this.grpCombined.TabIndex = 28;
             this.grpCombined.TabStop = false;
             this.grpCombined.Text = "Combined Component Info";
@@ -384,7 +386,7 @@
             // chkCombineComps
             // 
             this.chkCombineComps.AutoSize = true;
-            this.chkCombineComps.Location = new System.Drawing.Point(28, 125);
+            this.chkCombineComps.Location = new System.Drawing.Point(9, 137);
             this.chkCombineComps.Name = "chkCombineComps";
             this.chkCombineComps.Size = new System.Drawing.Size(129, 17);
             this.chkCombineComps.TabIndex = 27;
@@ -567,6 +569,17 @@
             this.lblProgress.Size = new System.Drawing.Size(0, 20);
             this.lblProgress.TabIndex = 30;
             // 
+            // chkShowIndvComps
+            // 
+            this.chkShowIndvComps.AutoSize = true;
+            this.chkShowIndvComps.Location = new System.Drawing.Point(28, 61);
+            this.chkShowIndvComps.Name = "chkShowIndvComps";
+            this.chkShowIndvComps.Size = new System.Drawing.Size(163, 17);
+            this.chkShowIndvComps.TabIndex = 29;
+            this.chkShowIndvComps.Text = "Show Individual Components";
+            this.chkShowIndvComps.UseVisualStyleBackColor = true;
+            this.chkShowIndvComps.CheckedChanged += new System.EventHandler(this.chkShowIndvComps_CheckedChanged);
+            // 
             // ComponentBuilderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -652,5 +665,6 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Button btnCombineComp;
         private System.Windows.Forms.Label lblProgress;
+        private System.Windows.Forms.CheckBox chkShowIndvComps;
     }
 }

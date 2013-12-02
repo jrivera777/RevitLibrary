@@ -341,10 +341,16 @@ namespace RevitLibrary.New_Forms
                 lbCurrentCrew.Items.Clear();
                 Assembly assem = (Assembly)cboFoundInModel.SelectedItem;
                 txtCategory.Text = assem.Category;
-                //txtArea.Text = assem.Area.ToString();
-                //txtVolume.Text = assem.Volume.ToString();
-                txtArea.Text = areas[assem.AssemblyCode].ToString();
-                txtVolume.Text = volumes[assem.AssemblyCode].ToString();
+                if (chkShowIndvComps.Checked)
+                {
+                    txtArea.Text = assem.Area.ToString();
+                    txtVolume.Text = assem.Volume.ToString();
+                }
+                else
+                {
+                    txtArea.Text = areas[assem.AssemblyCode].ToString();
+                    txtVolume.Text = volumes[assem.AssemblyCode].ToString();
+                }
             }
         }
         private void lbComponents_SelectedIndexChanged_1(object sender, EventArgs e)
@@ -474,7 +480,7 @@ namespace RevitLibrary.New_Forms
                     bComp.Name = assem.AssemblyName;
                     bComp.Description = assem.Description;
                     bComp.Category = assem.Category;
-                    Assemblies.Add(code, assem);
+                    Assemblies.Add(code, (Assembly)assem.Clone());
                     comps.Add(code, bComp);
                 }
 
@@ -696,6 +702,27 @@ namespace RevitLibrary.New_Forms
                 txtCombinedVolume.Text = (Double.Parse(txtCombinedVolume.Text) + assoc.Volume).ToString();
             }
             ClearControls();
+        }
+
+        private void chkShowIndvComps_CheckedChanged(object sender, EventArgs e)
+        {
+            cboFoundInModel.Items.Clear();
+            txtArea.Clear();
+            txtVolume.Clear();
+            if (chkShowIndvComps.Checked)
+            {
+                foreach (Assembly asb in foundInModel)
+                    cboFoundInModel.Items.Add(asb);
+            }
+            else
+            {
+                foreach (Assembly assem in Assemblies.Values)
+                {
+                    if (!cboFoundInModel.Items.Contains(assem))
+                        cboFoundInModel.Items.Add(assem);
+                }
+            }
+            cboFoundInModel.SelectedIndex = -1;
         }
     }
 }
