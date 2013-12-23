@@ -601,7 +601,7 @@ namespace RevitLibrary.New_Forms
                                                        MessageBoxIcon.Question);
 
                 String parametrics = "";
-                String baseDir = "";
+                String simOutput = "";
                 String resultsDir = "";
                 if (paraRes == DialogResult.Yes)
                 {
@@ -614,12 +614,14 @@ namespace RevitLibrary.New_Forms
                         if (!String.IsNullOrEmpty(openDlg.FileName))
                             parametrics = openDlg.FileName;
                     }
-                    using (FolderBrowserDialog fdDlg = new FolderBrowserDialog())
+                    using (OpenFileDialog openDlg = new OpenFileDialog())
                     {
-                        fdDlg.Description = "Select Folder Containing Energy Simulation Results";
-                        fdDlg.ShowDialog();
-                        if (!String.IsNullOrEmpty(fdDlg.SelectedPath))
-                            baseDir = fdDlg.SelectedPath;
+                        openDlg.Title = "Select Simulation Results File";
+                        openDlg.Filter = "TXT File|*.txt";
+                        openDlg.ShowDialog();
+
+                        if (!String.IsNullOrEmpty(openDlg.FileName))
+                            parametrics = openDlg.FileName;
                     }
                 }
 
@@ -643,8 +645,8 @@ namespace RevitLibrary.New_Forms
                     p.StartInfo.FileName = @"NSGAII.exe";
                     p.StartInfo.Arguments = "\"" + compFile + "\"  \"" + orderFile + "\" \"" + resultsDir + "\" 200 500 ";
 
-                    if (!String.IsNullOrEmpty(parametrics) && !String.IsNullOrEmpty(baseDir))
-                        p.StartInfo.Arguments += " \"" + parametrics + "\" \"" + baseDir + "\"";
+                    if (!String.IsNullOrEmpty(parametrics) && !String.IsNullOrEmpty(simOutput))
+                        p.StartInfo.Arguments += " \"" + parametrics + "\" \"" + simOutput + "\"";
 
                     p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
                     p.Start();
